@@ -28,7 +28,7 @@ const App = () => {
             {i18n.language.startsWith('en') ? 'Español' : 'English'}
           </button>
           <a href="#services" className="btn btn-primary" style={{ padding: '0.5rem 1.5rem' }}>
-            Book Appointment
+            {t('bookAppointmentBtn')}
           </a>
         </div>
       </header>
@@ -48,10 +48,10 @@ const App = () => {
             </p>
             <div className="flex gap-4">
               <a href="#services" className="btn btn-primary">
-                Explore Services <ArrowRight className="ml-2" size={18} />
+                {t('exploreServices')} <ArrowRight className="ml-2" size={18} />
               </a>
               <a href="https://maps.google.com/?q=Counselling+and+Clinical+Psychology+WA+Perth" target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
-                <MapPin className="mr-2" size={18} /> Location
+                <MapPin className="mr-2" size={18} /> {t('location')}
               </a>
             </div>
           </div>
@@ -65,7 +65,7 @@ const App = () => {
       {/* Services Section */}
       <section id="services" className="py-20 bg-light">
         <div className="container">
-          <h2 className="section-title">Therapy Services</h2>
+          <h2 className="section-title">{t('servicesTitle')}</h2>
           <p className="section-subtitle">
             {t('generalInquiriesText2')}
           </p>
@@ -107,13 +107,13 @@ const App = () => {
       {/* Professionals Section */}
       <section className="py-20">
         <div className="container">
-          <h2 className="section-title">Our Professionals</h2>
+          <h2 className="section-title">{t('ourProfessionals')}</h2>
           <div className="grid md:grid-cols-2 gap-12 mt-12">
             
             {/* Matias */}
             <div className="card">
-              <h3 className="card-title" style={{ color: 'var(--primary)' }}>{t('matiasName')}</h3>
-              <span className="badge mb-4">Senior Counsellor & Clinical Psychologist</span>
+              <h3 className="card-title" style={{ color: 'var(--primary)' }}>Matías de Ambrosio</h3>
+              <span className="badge mb-4">{t('matiasTitle')}</span>
               <p className="mb-4">{t('matiasBio1')}</p>
               <div className="mb-4">
                 <strong className="block mb-2">{t('matiasHospitalTitle')}</strong>
@@ -131,8 +131,8 @@ const App = () => {
 
             {/* Celeste */}
             <div className="card">
-              <h3 className="card-title" style={{ color: 'var(--primary)' }}>Celeste</h3>
-              <span className="badge mb-4">PhD-qualified Clinical Psychologist</span>
+              <h3 className="card-title" style={{ color: 'var(--primary)' }}>Celeste Labaronnie</h3>
+              <span className="badge mb-4">{t('celesteTitle')}</span>
               <p className="mb-4">{t('celesteBio1')}</p>
               <p className="mb-4 text-muted text-sm">{t('celesteBio2')}</p>
               <p className="mb-4 text-muted text-sm">{t('celesteBio3')}</p>
@@ -159,7 +159,7 @@ const App = () => {
             </div>
             <div className="card" style={{ padding: '2rem' }}>
               <div className="card-icon" style={{ width: 48, height: 48 }}><Sparkles size={24} /></div>
-              <h3 className="mb-4">NDIS Support</h3>
+              <h3 className="mb-4">{t('ndisFunding')}</h3>
               <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('ndisFundingText')}</p>
             </div>
           </div>
