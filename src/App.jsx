@@ -112,6 +112,7 @@ const App = () => {
             
             {/* Matias */}
             <div className="card">
+              <img src="/Matias.png" alt="Matías de Ambrosio" className="prof-image" />
               <h3 className="card-title" style={{ color: 'var(--primary)' }}>Matías de Ambrosio</h3>
               <span className="badge mb-4">{t('matiasTitle')}</span>
               <p className="mb-4">{t('matiasBio1')}</p>
@@ -131,6 +132,7 @@ const App = () => {
 
             {/* Celeste */}
             <div className="card">
+              <img src="/Celeste2.jpeg" alt="Celeste Labaronnie" className="prof-image" />
               <h3 className="card-title" style={{ color: 'var(--primary)' }}>Celeste Labaronnie</h3>
               <span className="badge mb-4">{t('celesteTitle')}</span>
               <p className="mb-4">{t('celesteBio1')}</p>
@@ -316,12 +318,9 @@ const IndividualResult = ({ result, onBook, onClose }) => {
   return (
     <Modal onClose={onClose}>
       <div className="text-center">
-        <div className="card-icon" style={{ margin: '0 auto 1.5rem auto', width: 80, height: 80 }}>
-          <User size={40} />
-        </div>
-        
         {result === 'matias' ? (
           <div>
+            <img src="/Matias.png" alt="Matías de Ambrosio" className="prof-image" style={{ margin: '0 auto 1.5rem auto' }} />
             <h2 className="mb-4" style={{ color: 'var(--primary)' }}>{t('recommendationMatiasTitle')}</h2>
             <p className="mb-4 text-left">{t('matiasBio1')}</p>
             <p className="mb-8 text-left text-muted">{t('matiasCulturalBio')}</p>
@@ -329,6 +328,7 @@ const IndividualResult = ({ result, onBook, onClose }) => {
           </div>
         ) : (
           <div>
+            <img src="/Celeste2.jpeg" alt="Celeste Labaronnie" className="prof-image" style={{ margin: '0 auto 1.5rem auto' }} />
             <h2 className="mb-4" style={{ color: 'var(--primary)' }}>{t('recommendationCelesteTitle')}</h2>
             <p className="mb-4 text-left">{t('celesteBio1')}</p>
             <p className="mb-8 text-left text-muted">{t('celesteBio3')}</p>
