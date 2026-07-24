@@ -8,6 +8,9 @@ const App = () => {
   // Modal states
   const [activeModal, setActiveModal] = useState(null); // 'couplesForm', 'individualQuiz', 'individualNdis', 'individualResult', 'intakeForm'
   const [individualResult, setIndividualResult] = useState(null);
+  
+  // Mobile tab state for Services
+  const [activeServiceTab, setActiveServiceTab] = useState('individual');
 
   const toggleLanguage = () => {
     i18n.changeLanguage(i18n.language.startsWith('en') ? 'es' : 'en');
@@ -70,9 +73,25 @@ const App = () => {
             {t('generalInquiriesText2')}
           </p>
           
+          {/* Mobile Tabs */}
+          <div className="md:hidden mobile-tabs-container">
+            <button 
+              className={`mobile-tab ${activeServiceTab === 'individual' ? 'active' : ''}`} 
+              onClick={() => setActiveServiceTab('individual')}
+            >
+              {t('individualTherapyBtn')}
+            </button>
+            <button 
+              className={`mobile-tab ${activeServiceTab === 'couples' ? 'active' : ''}`} 
+              onClick={() => setActiveServiceTab('couples')}
+            >
+              {t('couplesTherapyBtn')}
+            </button>
+          </div>
+
           <div className="grid md:grid-cols-2 gap-8">
             {/* Individual Therapy Card */}
-            <div className="card">
+            <div className={`card mobile-connected-card ${activeServiceTab !== 'individual' ? 'hidden md:flex' : ''}`}>
               <div className="card-icon"><User size={32} /></div>
               <h3 className="card-title">{t('individualTherapyBtn')}</h3>
               <p className="mb-8 text-muted" style={{ flexGrow: 1 }}>
@@ -89,9 +108,9 @@ const App = () => {
             </div>
 
             {/* Couples Therapy Card */}
-            <div className="card">
+            <div className={`card mobile-connected-card ${activeServiceTab !== 'couples' ? 'hidden md:flex' : ''}`}>
               <div className="card-icon"><Users size={32} /></div>
-              <h3 className="card-title">{t('couplesTherapyBtn')}</h3>
+              <h3 className="card-title">{t('couplesTherapyTitle')}</h3>
               <p className="mb-4" style={{ fontWeight: 600, color: 'var(--primary)' }}>{t('couplesTherapyCost')}</p>
               <p className="mb-8 text-muted" style={{ flexGrow: 1 }}>
                 {t('couplesTherapyIntro')}
