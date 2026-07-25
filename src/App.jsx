@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MapPin, ArrowRight, User, Users, Check, X, ArrowLeft, Heart, Shield, Sparkles } from 'lucide-react';
+import { sendEmail } from './emailService';
 
 const App = () => {
   const { t, i18n } = useTranslation();
   
   // Modal states
-  const [activeModal, setActiveModal] = useState(null); // 'couplesForm', 'individualQuiz', 'individualNdis', 'individualResult', 'intakeForm'
-  const [individualResult, setIndividualResult] = useState(null);
+  const [activeModal, setActiveModal] = useState(null); // 'couplesForm', 'individualIntake'
   
   // Mobile tab state for Services
   const [activeServiceTab, setActiveServiceTab] = useState('individual');
@@ -97,26 +97,26 @@ const App = () => {
               <p className="mb-8 text-muted" style={{ flexGrow: 1 }}>
                 {t('indivTherapySubtitle')} {t('indivTherapyIntro')}
               </p>
-              <div className="flex gap-4">
-                <button className="btn btn-primary w-full" onClick={() => setActiveModal('individualNdis')} style={{ flex: 1 }}>
-                  {t('ndisBtn')}
-                </button>
-                <button className="btn btn-outline w-full" onClick={() => setActiveModal('individualQuiz')} style={{ flex: 1 }}>
-                  {t('noNdisBtn')}
-                </button>
-              </div>
+              <button className="btn btn-primary w-full" onClick={() => setActiveModal('individualIntake')}>
+                {t('bookAppointmentBtn')}
+              </button>
             </div>
 
             {/* Couples Therapy Card */}
             <div className={`card mobile-connected-card ${activeServiceTab !== 'couples' ? 'hidden md:flex' : ''}`}>
-              <div className="card-icon"><Users size={32} /></div>
+              <div className="card-icon">
+                <div style={{ display: 'flex' }}>
+                  <User size={28} />
+                  <User size={28} style={{ marginLeft: '-8px' }} />
+                </div>
+              </div>
               <h3 className="card-title">{t('couplesTherapyTitle')}</h3>
               <p className="mb-4" style={{ fontWeight: 600, color: 'var(--primary)' }}>{t('couplesTherapyCost')}</p>
               <p className="mb-8 text-muted" style={{ flexGrow: 1 }}>
                 {t('couplesTherapyIntro')}
               </p>
               <button className="btn btn-primary w-full" onClick={() => setActiveModal('couplesForm')}>
-                {t('requestTimesBtn')}
+                {t('bookAppointmentBtn')}
               </button>
             </div>
           </div>
@@ -196,42 +196,15 @@ const App = () => {
       </footer>
 
       {/* Modals Rendering */}
-      {activeModal === 'individualNdis' && (
-        <Modal title={t('ndisBtn')} onClose={closeModal}>
-          <p className="mb-6">{t('ndisFundingText')}</p>
-          <div className="flex flex-col gap-4">
-            <button className="btn btn-primary" onClick={() => setActiveModal('intakeForm')}>{t('selfManagedPlan')}</button>
-            <button className="btn btn-primary" onClick={() => setActiveModal('intakeForm')}>{t('planManagedPlan')}</button>
-            <button className="btn btn-primary" onClick={() => setActiveModal('intakeForm')}>{t('agencyManagedPlan')}</button>
-          </div>
-        </Modal>
-      )}
-
-      {activeModal === 'individualQuiz' && (
-        <IndividualQuiz 
-          onClose={closeModal} 
-          onComplete={(result) => {
-            setIndividualResult(result);
-            setActiveModal('individualResult');
-          }} 
-        />
-      )}
-
-      {activeModal === 'individualResult' && (
-        <IndividualResult 
-          result={individualResult} 
-          onBook={() => setActiveModal('intakeForm')} 
-          onClose={closeModal} 
-        />
+      {activeModal === 'individualIntake' && (
+        <IndividualIntakeFlow onClose={closeModal} />
       )}
 
       {activeModal === 'couplesForm' && (
         <CouplesIntakeForm onClose={closeModal} />
       )}
 
-      {activeModal === 'intakeForm' && (
-        <IndividualIntakeForm onClose={closeModal} />
-      )}
+      
     </div>
   );
 };
@@ -247,114 +220,170 @@ const Modal = ({ title, onClose, children }) => (
   </div>
 );
 
-// Quiz Logic remains the same, just updated class names if needed
-const IndividualQuiz = ({ onClose, onComplete }) => {
+
+const IndividualIntakeFlow = ({ onClose }) => {
   const { t } = useTranslation();
   const [step, setStep] = useState(1);
-  const [answers, setAnswers] = useState({ reason: '', medicare: '', lang: '', reports: '' });
+  const [answers, setAnswers] = useState({ 
+    reason: '', 
+    diagnosis: '', 
+    medicare: '', 
+    reports: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    medicareNumber: '',
+    emergName: '',
+    emergPhone: '',
+    emergRel: ''
+  });
+  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleNext = () => {
-    if (step < 4) setStep(step + 1);
-    else {
-      if (answers.medicare === 'No' || answers.reports === 'Yes, I need formal certificates/reports.' || answers.reports === 'Yes, both apply.') {
-        onComplete('matias');
+    if (step === 1) {
+      if (!answers.reason) return; // Basic validation
+      setStep(2);
+    } else if (step === 2) {
+      if (!answers.medicare) return;
+      if (answers.medicare === 'Yes') {
+        setStep(4); // Skip formal reports
       } else {
-        onComplete('celeste');
+        setStep(3);
       }
+    } else if (step === 3) {
+      if (!answers.reports) return;
+      setStep(4);
     }
   };
 
+  const handleBack = () => {
+    if (step === 4 && answers.medicare === 'Yes') {
+      setStep(2);
+    } else {
+      setStep(step - 1);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    // Determine recipient
+    let recipient = 'admin@counsellingandclinicalpsychologywa.com.au';
+    if (answers.medicare === 'Yes' || 
+        answers.reports === 'Yes, I need formal certificates/reports.' || 
+        answers.reports === 'Yes, an institution/workplace will be paying for the sessions.' || 
+        answers.reports === 'Yes, both apply.') {
+      recipient = 'celeste@counsellingandclinicalpsychologywa.com.au';
+    }
+
+    try {
+      await sendEmail(recipient, 'Individual Therapy Intake', answers);
+      setSubmitted(true);
+    } catch (err) {
+      console.error(err);
+      setError('There was an error submitting the form. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (submitted) {
+    return (
+      <Modal onClose={onClose}>
+        <div className="text-center py-8">
+          <div className="card-icon" style={{ margin: '0 auto 1.5rem auto', background: '#dcfce7', color: '#16a34a' }}>
+            <Check size={32} />
+          </div>
+          <h3 className="mb-4">Request Sent</h3>
+          <p className="text-muted">{t('successMessage')}</p>
+          <button className="btn btn-primary mt-8" onClick={onClose}>Return to Home</button>
+        </div>
+      </Modal>
+    );
+  }
+
   return (
     <Modal title={t('indivTherapyTitle')} onClose={onClose}>
-      <p className="mb-6 text-muted">{t('indivTherapyIntro')}</p>
-      
-      {step === 1 && (
-        <div className="animate-fade-in">
-          <h4 className="mb-2">{t('q1Title')}</h4>
-          <p className="mb-4 text-muted text-sm">{t('q1Subtitle')}</p>
-          <textarea className="form-control mb-4" rows="4" value={answers.reason} onChange={e => setAnswers({...answers, reason: e.target.value})}></textarea>
-        </div>
-      )}
+      {step < 4 ? (
+        <div>
+          {step === 1 && (
+            <div className="animate-fade-in">
+              <h4 className="mb-2">What is your primary reason for seeking consultation? *</h4>
+              <textarea className="form-control mb-4" rows="4" value={answers.reason} onChange={e => setAnswers({...answers, reason: e.target.value})} required></textarea>
+              
+              <h4 className="mb-2 mt-4">If you have a relevant prior diagnosis you would like to share, please enter it here.</h4>
+              <textarea className="form-control mb-4" rows="2" value={answers.diagnosis} onChange={e => setAnswers({...answers, diagnosis: e.target.value})}></textarea>
+            </div>
+          )}
 
-      {step === 2 && (
-        <div className="animate-fade-in">
-          <h4 className="mb-4">{t('q2Title')}</h4>
-          <div className="flex flex-col gap-2">
-            {['Yes', 'No', 'Unsure'].map(opt => (
-              <label key={opt} className="form-check">
-                <input type="radio" name="medicare" className="form-check-input" checked={answers.medicare === opt} onChange={() => setAnswers({...answers, medicare: opt})} />
-                <span className="form-check-label font-medium">{t(`opt${opt}`)}</span>
-              </label>
-            ))}
+          {step === 2 && (
+            <div className="animate-fade-in">
+              <h4 className="mb-4">{t('q2Title')}</h4>
+              <div className="flex flex-col gap-2">
+                {['Yes', 'No', 'Unsure'].map(opt => (
+                  <label key={opt} className="form-check">
+                    <input type="radio" name="medicare" className="form-check-input" checked={answers.medicare === opt} onChange={() => setAnswers({...answers, medicare: opt})} />
+                    <span className="form-check-label font-medium">{t(`opt${opt}`)}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {step === 3 && (
+            <div className="animate-fade-in">
+              <h4 className="mb-4">{t('q4Title')}</h4>
+              <div className="flex flex-col gap-2">
+                {[
+                  { id: 'A', val: 'Yes, I need formal certificates/reports.' },
+                  { id: 'B', val: 'Yes, an institution/workplace will be paying for the sessions.' },
+                  { id: 'C', val: 'Yes, both apply.' },
+                  { id: 'D', val: 'No, neither applies.' }
+                ].map(opt => (
+                  <label key={opt.id} className="form-check">
+                    <input type="radio" name="reports" className="form-check-input" checked={answers.reports === opt.val} onChange={() => setAnswers({...answers, reports: opt.val})} />
+                    <span className="form-check-label font-medium">{t(`optQ4${opt.id}`)}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="flex justify-between mt-8 pt-6 border-t" style={{ borderTop: '1px solid var(--border-color)' }}>
+            {step > 1 ? <button className="btn btn-secondary" onClick={handleBack}><ArrowLeft size={16} className="mr-2"/> {t('back')}</button> : <div></div>}
+            <button className="btn btn-primary" onClick={handleNext} disabled={(step === 1 && !answers.reason) || (step === 2 && !answers.medicare) || (step === 3 && !answers.reports)}>{t('next')}</button>
           </div>
         </div>
+      ) : (
+        <form onSubmit={handleSubmit} className="animate-fade-in">
+          {error && <div style={{ color: 'red', marginBottom: '1rem', padding: '1rem', background: '#fee2e2', borderRadius: '8px' }}>{error}</div>}
+          <h4 className="mb-4" style={{ color: 'var(--primary)' }}>Personal Information</h4>
+          <div className="grid md:grid-cols-2 gap-4 mb-8">
+            <input className="form-control" placeholder={t('firstName')} required value={answers.firstName} onChange={e => setAnswers({...answers, firstName: e.target.value})} />
+            <input className="form-control" placeholder={t('lastName')} required value={answers.lastName} onChange={e => setAnswers({...answers, lastName: e.target.value})} />
+            <input className="form-control" placeholder={t('emailAddress')} type="email" required value={answers.email} onChange={e => setAnswers({...answers, email: e.target.value})} />
+            <input className="form-control" placeholder={t('phoneNumber')} required value={answers.phone} onChange={e => setAnswers({...answers, phone: e.target.value})} />
+            <input className="form-control md:col-span-2" placeholder={t('medicareNumber')} value={answers.medicareNumber} onChange={e => setAnswers({...answers, medicareNumber: e.target.value})} />
+          </div>
+
+          <h4 className="mb-4" style={{ color: 'var(--primary)' }}>Emergency Contact</h4>
+          <div className="grid md:grid-cols-2 gap-4 mb-8">
+            <input className="form-control" placeholder={t('firstName')} required value={answers.emergName} onChange={e => setAnswers({...answers, emergName: e.target.value})} />
+            <input className="form-control" placeholder={t('phoneNumber')} required value={answers.emergPhone} onChange={e => setAnswers({...answers, emergPhone: e.target.value})} />
+            <input className="form-control md:col-span-2" placeholder={t('relationshipToYou')} required value={answers.emergRel} onChange={e => setAnswers({...answers, emergRel: e.target.value})} />
+          </div>
+          
+          <div className="flex justify-between mt-8 pt-6 border-t" style={{ borderTop: '1px solid var(--border-color)' }}>
+            <button type="button" className="btn btn-secondary" onClick={handleBack}><ArrowLeft size={16} className="mr-2"/> {t('back')}</button>
+            <button type="submit" className="btn btn-primary" disabled={loading}>{loading ? 'Sending...' : t('submit')}</button>
+          </div>
+        </form>
       )}
-
-      {step === 3 && (
-        <div className="animate-fade-in">
-          <h4 className="mb-4">{t('q3Title')}</h4>
-          <div className="flex flex-col gap-2">
-            {['English', 'Spanish', 'Either'].map(opt => (
-              <label key={opt} className="form-check">
-                <input type="radio" name="lang" className="form-check-input" checked={answers.lang === opt} onChange={() => setAnswers({...answers, lang: opt})} />
-                <span className="form-check-label font-medium">{t(`opt${opt}`)}</span>
-              </label>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {step === 4 && (
-        <div className="animate-fade-in">
-          <h4 className="mb-4">{t('q4Title')}</h4>
-          <div className="flex flex-col gap-2">
-            {[
-              { id: 'A', val: 'Yes, I need formal certificates/reports.' },
-              { id: 'B', val: 'Yes, an institution/workplace will be paying for the sessions.' },
-              { id: 'C', val: 'Yes, both apply.' },
-              { id: 'D', val: 'No, neither applies.' }
-            ].map(opt => (
-              <label key={opt.id} className="form-check">
-                <input type="radio" name="reports" className="form-check-input" checked={answers.reports === opt.val} onChange={() => setAnswers({...answers, reports: opt.val})} />
-                <span className="form-check-label font-medium">{t(`optQ4${opt.id}`)}</span>
-              </label>
-            ))}
-          </div>
-        </div>
-      )}
-
-      <div className="flex justify-between mt-8 pt-6 border-t" style={{ borderTop: '1px solid var(--border-color)' }}>
-        {step > 1 ? <button className="btn btn-secondary" onClick={() => setStep(step-1)}><ArrowLeft size={16} className="mr-2"/> {t('back')}</button> : <div></div>}
-        <button className="btn btn-primary" onClick={handleNext}>{step === 4 ? t('submit') : t('next')}</button>
-      </div>
-    </Modal>
-  );
-};
-
-const IndividualResult = ({ result, onBook, onClose }) => {
-  const { t } = useTranslation();
-  
-  return (
-    <Modal onClose={onClose}>
-      <div className="text-center">
-        {result === 'matias' ? (
-          <div>
-            <img src="/Matias.png" alt="Matías de Ambrosio" className="prof-image" style={{ margin: '0 auto 1.5rem auto' }} />
-            <h2 className="mb-4" style={{ color: 'var(--primary)' }}>{t('recommendationMatiasTitle')}</h2>
-            <p className="mb-4 text-left">{t('matiasBio1')}</p>
-            <p className="mb-8 text-left text-muted">{t('matiasCulturalBio')}</p>
-            <button className="btn btn-primary w-full" style={{ width: '100%' }} onClick={onBook}>{t('bookWithMatias')}</button>
-          </div>
-        ) : (
-          <div>
-            <img src="/Celeste2.jpeg" alt="Celeste Labaronnie" className="prof-image" style={{ margin: '0 auto 1.5rem auto' }} />
-            <h2 className="mb-4" style={{ color: 'var(--primary)' }}>{t('recommendationCelesteTitle')}</h2>
-            <p className="mb-4 text-left">{t('celesteBio1')}</p>
-            <p className="mb-8 text-left text-muted">{t('celesteBio3')}</p>
-            <button className="btn btn-primary w-full" style={{ width: '100%' }} onClick={onBook}>{t('bookWithCeleste')}</button>
-          </div>
-        )}
-      </div>
     </Modal>
   );
 };
@@ -362,6 +391,31 @@ const IndividualResult = ({ result, onBook, onClose }) => {
 const CouplesIntakeForm = ({ onClose }) => {
   const { t } = useTranslation();
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+    
+    try {
+      await sendEmail(
+        'admin@counsellingandclinicalpsychologywa.com.au',
+        'Couples Therapy Intake',
+        data
+      );
+      setSubmitted(true);
+    } catch (err) {
+      console.error(err);
+      setError('There was an error submitting the form. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (submitted) {
     return (
@@ -380,73 +434,32 @@ const CouplesIntakeForm = ({ onClose }) => {
 
   return (
     <Modal title="Couples Therapy Intake" onClose={onClose}>
-      <form onSubmit={e => { e.preventDefault(); setSubmitted(true); }}>
+      <form onSubmit={handleSubmit}>
+        {error && <div style={{ color: 'red', marginBottom: '1rem', padding: '1rem', background: '#fee2e2', borderRadius: '8px' }}>{error}</div>}
         <h4 className="mb-4" style={{ color: 'var(--primary)' }}>1. Client 1 (Primary Contact)</h4>
         <div className="grid md:grid-cols-2 gap-4 mb-8">
-          <input className="form-control" placeholder={t('firstName')} required />
-          <input className="form-control" placeholder={t('lastName')} required />
-          <input className="form-control" placeholder={t('emailAddress')} type="email" required />
-          <input className="form-control" placeholder={t('phoneNumber')} required />
+          <input className="form-control" name="client1_firstName" placeholder={t('firstName')} required />
+          <input className="form-control" name="client1_lastName" placeholder={t('lastName')} required />
+          <input className="form-control" name="client1_email" placeholder={t('emailAddress')} type="email" required />
+          <input className="form-control" name="client1_phone" placeholder={t('phoneNumber')} required />
         </div>
 
         <h4 className="mb-4" style={{ color: 'var(--primary)' }}>2. Client 2</h4>
         <div className="grid md:grid-cols-2 gap-4 mb-8">
-          <input className="form-control" placeholder={t('firstName')} />
-          <input className="form-control" placeholder={t('lastName')} />
-          <input className="form-control" placeholder={t('emailAddress')} type="email" />
+          <input className="form-control" name="client2_firstName" placeholder={t('firstName')} />
+          <input className="form-control" name="client2_lastName" placeholder={t('lastName')} />
+          <input className="form-control" name="client2_email" placeholder={t('emailAddress')} type="email" />
         </div>
 
         <h4 className="mb-4" style={{ color: 'var(--primary)' }}>3. Session Preference</h4>
         <div className="flex gap-4 mb-8">
-           <label className="form-check flex-1"><input type="radio" name="sessPref" className="form-check-input" required/><span className="form-check-label">{t('inPerson')}</span></label>
-           <label className="form-check flex-1"><input type="radio" name="sessPref" className="form-check-input" required/><span className="form-check-label">{t('telehealth')}</span></label>
+           <label className="form-check flex-1"><input type="radio" name="sessionPref" value="In Person" className="form-check-input" required/><span className="form-check-label">{t('inPerson')}</span></label>
+           <label className="form-check flex-1"><input type="radio" name="sessionPref" value="Telehealth" className="form-check-input" required/><span className="form-check-label">{t('telehealth')}</span></label>
         </div>
         
-        <button type="submit" className="btn btn-primary w-full" style={{ width: '100%' }}>{t('submit')}</button>
-      </form>
-    </Modal>
-  );
-};
-
-const IndividualIntakeForm = ({ onClose }) => {
-  const { t } = useTranslation();
-  const [submitted, setSubmitted] = useState(false);
-
-  if (submitted) {
-    return (
-      <Modal onClose={onClose}>
-        <div className="text-center py-8">
-          <div className="card-icon" style={{ margin: '0 auto 1.5rem auto', background: '#dcfce7', color: '#16a34a' }}>
-            <Check size={32} />
-          </div>
-          <h3 className="mb-4">Request Sent</h3>
-          <p className="text-muted">{t('successMessage')}</p>
-          <button className="btn btn-primary mt-8" onClick={onClose}>Return to Home</button>
-        </div>
-      </Modal>
-    );
-  }
-
-  return (
-    <Modal title={t('intakeFormTitle')} onClose={onClose}>
-      <form onSubmit={e => { e.preventDefault(); setSubmitted(true); }}>
-        <h4 className="mb-4" style={{ color: 'var(--primary)' }}>1. Personal Information</h4>
-        <div className="grid md:grid-cols-2 gap-4 mb-8">
-          <input className="form-control" placeholder={t('firstName')} required />
-          <input className="form-control" placeholder={t('lastName')} required />
-          <input className="form-control" placeholder={t('emailAddress')} type="email" required />
-          <input className="form-control" placeholder={t('phoneNumber')} required />
-          <input className="form-control md:col-span-2" placeholder={t('medicareNumber')} />
-        </div>
-
-        <h4 className="mb-4" style={{ color: 'var(--primary)' }}>2. Emergency Contact</h4>
-        <div className="grid md:grid-cols-2 gap-4 mb-8">
-          <input className="form-control" placeholder={t('firstName')} required />
-          <input className="form-control" placeholder={t('phoneNumber')} required />
-          <input className="form-control md:col-span-2" placeholder={t('relationshipToYou')} required />
-        </div>
-        
-        <button type="submit" className="btn btn-primary w-full" style={{ width: '100%' }}>{t('submit')}</button>
+        <button type="submit" className="btn btn-primary w-full" style={{ width: '100%' }} disabled={loading}>
+          {loading ? 'Sending...' : t('submit')}
+        </button>
       </form>
     </Modal>
   );
