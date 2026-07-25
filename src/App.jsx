@@ -234,6 +234,12 @@ const IndividualIntakeFlow = ({ onClose }) => {
     email: '',
     phone: '',
     medicareNumber: '',
+    preferredName: '',
+    countryOfBirth: '',
+    gender: '',
+    pronouns: '',
+    preferredLanguage: '',
+    sessionPreference: [],
     emergName: '',
     emergPhone: '',
     emergRel: ''
@@ -366,9 +372,37 @@ const IndividualIntakeFlow = ({ onClose }) => {
           <div className="grid md:grid-cols-2 gap-4 mb-8">
             <input className="form-control" placeholder={t('firstName')} required value={answers.firstName} onChange={e => setAnswers({...answers, firstName: e.target.value})} />
             <input className="form-control" placeholder={t('lastName')} required value={answers.lastName} onChange={e => setAnswers({...answers, lastName: e.target.value})} />
+            <input className="form-control" placeholder={t('preferredName')} value={answers.preferredName} onChange={e => setAnswers({...answers, preferredName: e.target.value})} />
             <input className="form-control" placeholder={t('emailAddress')} type="email" required value={answers.email} onChange={e => setAnswers({...answers, email: e.target.value})} />
             <input className="form-control" placeholder={t('phoneNumber')} required value={answers.phone} onChange={e => setAnswers({...answers, phone: e.target.value})} />
+            <input className="form-control" placeholder={t('countryOfBirth')} value={answers.countryOfBirth} onChange={e => setAnswers({...answers, countryOfBirth: e.target.value})} />
+            <select className="form-control" value={answers.gender} onChange={e => setAnswers({...answers, gender: e.target.value})}>
+              <option value="">{t('gender')}</option>
+              <option value="Male">{t('genderMale')}</option>
+              <option value="Female">{t('genderFemale')}</option>
+              <option value="Non-binary">{t('genderNonBinary')}</option>
+              <option value="Prefer not to say">{t('genderPreferNotToSay')}</option>
+              <option value="Self-describe">{t('genderSelfDescribe')}</option>
+            </select>
+            <select className="form-control" value={answers.pronouns} onChange={e => setAnswers({...answers, pronouns: e.target.value})}>
+              <option value="">{t('pronouns')}</option>
+              <option value="He/Him">{t('pronounsHeHim')}</option>
+              <option value="She/Her">{t('pronounsSheHer')}</option>
+              <option value="They/Them">{t('pronounsTheyThem')}</option>
+              <option value="Prefer not to say">{t('pronounsPreferNotToSay')}</option>
+            </select>
             <input className="form-control md:col-span-2" placeholder={t('medicareNumber')} value={answers.medicareNumber} onChange={e => setAnswers({...answers, medicareNumber: e.target.value})} />
+            <div className="md:col-span-2">
+              <p className="form-label mb-2">{t('preferredLanguage')}</p>
+              <div className="flex gap-4">
+                {['English', 'Spanish', 'Either'].map(opt => (
+                  <label key={opt} className="form-check flex-1">
+                    <input type="radio" name="preferredLanguage" className="form-check-input" checked={answers.preferredLanguage === opt} onChange={() => setAnswers({...answers, preferredLanguage: opt})} />
+                    <span className="form-check-label">{t(`opt${opt}`)}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
           </div>
 
           <h4 className="mb-4" style={{ color: 'var(--primary)' }}>Emergency Contact</h4>
@@ -376,6 +410,21 @@ const IndividualIntakeFlow = ({ onClose }) => {
             <input className="form-control" placeholder={t('firstName')} required value={answers.emergName} onChange={e => setAnswers({...answers, emergName: e.target.value})} />
             <input className="form-control" placeholder={t('phoneNumber')} required value={answers.emergPhone} onChange={e => setAnswers({...answers, emergPhone: e.target.value})} />
             <input className="form-control md:col-span-2" placeholder={t('relationshipToYou')} required value={answers.emergRel} onChange={e => setAnswers({...answers, emergRel: e.target.value})} />
+          </div>
+
+          <h4 className="mb-4" style={{ color: 'var(--primary)' }}>{t('sessionPreference')}</h4>
+          <div className="flex gap-4 mb-8">
+            {[{ val: 'In-person', key: 'inPerson' }, { val: 'Phone call', key: 'phoneCall' }, { val: 'Telehealth', key: 'telehealth' }].map(opt => (
+              <label key={opt.val} className="form-check flex-1">
+                <input type="checkbox" className="form-check-input" checked={answers.sessionPreference.includes(opt.val)} onChange={() => {
+                  const updated = answers.sessionPreference.includes(opt.val)
+                    ? answers.sessionPreference.filter(v => v !== opt.val)
+                    : [...answers.sessionPreference, opt.val];
+                  setAnswers({...answers, sessionPreference: updated});
+                }} />
+                <span className="form-check-label">{t(opt.key)}</span>
+              </label>
+            ))}
           </div>
           
           <div className="flex justify-between mt-8 pt-6 border-t" style={{ borderTop: '1px solid var(--border-color)' }}>
@@ -401,6 +450,7 @@ const CouplesIntakeForm = ({ onClose }) => {
     
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
+    data.sessionPref = formData.getAll('sessionPref');
     
     try {
       await sendEmail(
@@ -440,21 +490,82 @@ const CouplesIntakeForm = ({ onClose }) => {
         <div className="grid md:grid-cols-2 gap-4 mb-8">
           <input className="form-control" name="client1_firstName" placeholder={t('firstName')} required />
           <input className="form-control" name="client1_lastName" placeholder={t('lastName')} required />
+          <input className="form-control" name="client1_preferredName" placeholder={t('preferredName')} />
           <input className="form-control" name="client1_email" placeholder={t('emailAddress')} type="email" required />
           <input className="form-control" name="client1_phone" placeholder={t('phoneNumber')} required />
+          <input className="form-control" name="client1_countryOfBirth" placeholder={t('countryOfBirth')} />
+          <select className="form-control" name="client1_gender">
+            <option value="">{t('gender')}</option>
+            <option value="Male">{t('genderMale')}</option>
+            <option value="Female">{t('genderFemale')}</option>
+            <option value="Non-binary">{t('genderNonBinary')}</option>
+            <option value="Prefer not to say">{t('genderPreferNotToSay')}</option>
+            <option value="Self-describe">{t('genderSelfDescribe')}</option>
+          </select>
+          <select className="form-control" name="client1_pronouns">
+            <option value="">{t('pronouns')}</option>
+            <option value="He/Him">{t('pronounsHeHim')}</option>
+            <option value="She/Her">{t('pronounsSheHer')}</option>
+            <option value="They/Them">{t('pronounsTheyThem')}</option>
+            <option value="Prefer not to say">{t('pronounsPreferNotToSay')}</option>
+          </select>
+          <div className="md:col-span-2">
+            <p className="form-label mb-2">{t('preferredLanguage')}</p>
+            <div className="flex gap-4">
+              {['English', 'Spanish', 'Either'].map(opt => (
+                <label key={opt} className="form-check flex-1">
+                  <input type="radio" name="client1_preferredLanguage" value={opt} className="form-check-input" />
+                  <span className="form-check-label">{t(`opt${opt}`)}</span>
+                </label>
+              ))}
+            </div>
+          </div>
         </div>
 
         <h4 className="mb-4" style={{ color: 'var(--primary)' }}>2. Client 2</h4>
         <div className="grid md:grid-cols-2 gap-4 mb-8">
           <input className="form-control" name="client2_firstName" placeholder={t('firstName')} />
           <input className="form-control" name="client2_lastName" placeholder={t('lastName')} />
+          <input className="form-control" name="client2_preferredName" placeholder={t('preferredName')} />
           <input className="form-control" name="client2_email" placeholder={t('emailAddress')} type="email" />
+          <input className="form-control" name="client2_phone" placeholder={t('phoneNumber')} required />
+          <input className="form-control" name="client2_countryOfBirth" placeholder={t('countryOfBirth')} />
+          <select className="form-control" name="client2_gender">
+            <option value="">{t('gender')}</option>
+            <option value="Male">{t('genderMale')}</option>
+            <option value="Female">{t('genderFemale')}</option>
+            <option value="Non-binary">{t('genderNonBinary')}</option>
+            <option value="Prefer not to say">{t('genderPreferNotToSay')}</option>
+            <option value="Self-describe">{t('genderSelfDescribe')}</option>
+          </select>
+          <select className="form-control" name="client2_pronouns">
+            <option value="">{t('pronouns')}</option>
+            <option value="He/Him">{t('pronounsHeHim')}</option>
+            <option value="She/Her">{t('pronounsSheHer')}</option>
+            <option value="They/Them">{t('pronounsTheyThem')}</option>
+            <option value="Prefer not to say">{t('pronounsPreferNotToSay')}</option>
+          </select>
+          <div className="md:col-span-2">
+            <p className="form-label mb-2">{t('preferredLanguage')}</p>
+            <div className="flex gap-4">
+              {['English', 'Spanish', 'Either'].map(opt => (
+                <label key={opt} className="form-check flex-1">
+                  <input type="radio" name="client2_preferredLanguage" value={opt} className="form-check-input" />
+                  <span className="form-check-label">{t(`opt${opt}`)}</span>
+                </label>
+              ))}
+            </div>
+          </div>
         </div>
 
-        <h4 className="mb-4" style={{ color: 'var(--primary)' }}>3. Session Preference</h4>
+        <h4 className="mb-4" style={{ color: 'var(--primary)' }}>3. {t('sessionPreference')}</h4>
         <div className="flex gap-4 mb-8">
-           <label className="form-check flex-1"><input type="radio" name="sessionPref" value="In Person" className="form-check-input" required/><span className="form-check-label">{t('inPerson')}</span></label>
-           <label className="form-check flex-1"><input type="radio" name="sessionPref" value="Telehealth" className="form-check-input" required/><span className="form-check-label">{t('telehealth')}</span></label>
+           {[{ val: 'In-person', key: 'inPerson' }, { val: 'Phone call', key: 'phoneCall' }, { val: 'Telehealth', key: 'telehealth' }].map(opt => (
+             <label key={opt.val} className="form-check flex-1">
+               <input type="checkbox" name="sessionPref" value={opt.val} className="form-check-input" />
+               <span className="form-check-label">{t(opt.key)}</span>
+             </label>
+           ))}
         </div>
         
         <button type="submit" className="btn btn-primary w-full" style={{ width: '100%' }} disabled={loading}>

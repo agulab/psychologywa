@@ -111,5 +111,15 @@
   "ndisConsent": "NDIS Eligibility Referral Consent: I consent to be contacted by our partner organisation, Innovative Mentoring, in the event that I am found suitable to apply for the National Disability Insurance Scheme (NDIS).",
   "termsIndivText1": "1. Clinical Records & Privacy: I understand that the collection and secure storage of my personal and health information is a legal requirement for providing psychological services, and all data is managed in accordance with the Privacy Act 1988.",
   "termsIndivText2": "2. Limitations of Confidentiality: I acknowledge that my information is strictly confidential, except where there is a legal obligation to disclose (e.g., immediate risk of serious harm to myself or others, or a court subpoena).",
-  "back": "Back"
+  "back": "Back",
+  "preferredLanguage": "Preferred language for the sessions",
+  "genderMale": "Male",
+  "genderFemale": "Female",
+  "genderNonBinary": "Non-binary",
+  "genderPreferNotToSay": "Prefer not to say",
+  "genderSelfDescribe": "Self-describe",
+  "pronounsHeHim": "He/Him",
+  "pronounsSheHer": "She/Her",
+  "pronounsTheyThem": "They/Them",
+  "pronounsPreferNotToSay": "Prefer not to say"
 }

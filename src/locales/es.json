@@ -111,5 +111,15 @@
   "ndisConsent": "Consentimiento de Referencia a NDIS...",
   "termsIndivText1": "1. Privacidad y Gestión de Datos...",
   "termsIndivText2": "2. Limitaciones de Confidencialidad...",
-  "back": "Atrás"
+  "back": "Atrás",
+  "preferredLanguage": "Idioma preferido para las sesiones",
+  "genderMale": "Masculino",
+  "genderFemale": "Femenino",
+  "genderNonBinary": "No binario",
+  "genderPreferNotToSay": "Prefiero no decir",
+  "genderSelfDescribe": "Autodescribir",
+  "pronounsHeHim": "Él/Él",
+  "pronounsSheHer": "Ella/Ella",
+  "pronounsTheyThem": "Ellos/Ellas",
+  "pronounsPreferNotToSay": "Prefiero no decir"
 }
