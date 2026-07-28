@@ -1,9 +1,19 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { MapPin, ArrowRight, User, Users, Check, X, ArrowLeft, Heart, Shield, Sparkles } from 'lucide-react';
 import { sendEmail } from './emailService';
+import ComingSoon from './ComingSoon';
 
-const App = () => {
+const App = () => (
+  <Routes>
+    <Route path="/" element={<ComingSoon />} />
+    <Route path="/soon" element={<MainSite />} />
+    <Route path="*" element={<Navigate to="/" replace />} />
+  </Routes>
+);
+
+const MainSite = () => {
   const { t, i18n } = useTranslation();
   
   // Modal states
@@ -18,7 +28,6 @@ const App = () => {
 
   const closeModal = () => {
     setActiveModal(null);
-    setIndividualResult(null);
   };
 
   return (
