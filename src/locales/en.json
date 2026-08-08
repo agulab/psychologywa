@@ -1,5 +1,5 @@
 {
-  "bookAppointmentBtn": "Book Appointment",
+  "bookAppointmentBtn": "Check availability",
   "exploreServices": "Explore Services",
   "location": "Location",
   "servicesTitle": "Therapy Services",
@@ -121,5 +121,14 @@
   "pronounsHeHim": "He/Him",
   "pronounsSheHer": "She/Her",
   "pronounsTheyThem": "They/Them",
-  "pronounsPreferNotToSay": "Prefer not to say"
+  "pronounsPreferNotToSay": "Prefer not to say",
+  "intakeFormTitle": "Contact Request",
+  "requestSent": "Request Sent",
+  "returnHome": "Return to Home",
+  "yourName": "A name for us to call you",
+  "yourNamePlaceholder": "Your name or nickname",
+  "therapyType": "What type of therapy are you looking for?",
+  "hasMedicare": "I have Medicare",
+  "hasNDIS": "I have NDIS funding",
+  "needsReports": "I will require forms or certificates"
 }

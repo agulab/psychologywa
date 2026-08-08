@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { MapPin, ArrowRight, User, Users, Check, X, ArrowLeft, Heart, Shield, Sparkles } from 'lucide-react';
+import { MapPin, ArrowRight, User, Check, X, Heart, Shield, Sparkles } from 'lucide-react';
 import { sendEmail } from './emailService';
 import ComingSoon from './ComingSoon';
 import logo from './assets/logo.png';
@@ -206,12 +206,11 @@ const MainSite = () => {
       </footer>
 
       {/* Modals Rendering */}
-      {activeModal === 'individualIntake' && (
-        <IndividualIntakeFlow onClose={closeModal} />
-      )}
-
-      {activeModal === 'couplesForm' && (
-        <CouplesIntakeForm onClose={closeModal} />
+      {activeModal && (
+        <IntakeForm
+          onClose={closeModal}
+          defaultTherapyType={activeModal === 'couplesForm' ? 'couples' : 'individual'}
+        />
       )}
 
       
@@ -231,74 +230,27 @@ const Modal = ({ title, onClose, children }) => (
 );
 
 
-const IndividualIntakeFlow = ({ onClose }) => {
+const IntakeForm = ({ onClose, defaultTherapyType }) => {
   const { t } = useTranslation();
-  const [step, setStep] = useState(1);
-  const [answers, setAnswers] = useState({ 
-    reason: '', 
-    diagnosis: '', 
-    medicare: '', 
-    reports: '',
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    medicareNumber: '',
-    preferredName: '',
-    countryOfBirth: '',
-    gender: '',
-    pronouns: '',
-    preferredLanguage: '',
-    sessionPreference: [],
-    emergName: '',
-    emergPhone: '',
-    emergRel: ''
+  const [form, setForm] = useState({
+    name: '',
+    therapyType: defaultTherapyType || 'individual',
+    medicare: 'no',
+    ndis: 'no',
+    certificates: 'no',
+    email: ''
   });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const handleNext = () => {
-    if (step === 1) {
-      if (!answers.reason) return; // Basic validation
-      setStep(2);
-    } else if (step === 2) {
-      if (!answers.medicare) return;
-      if (answers.medicare === 'Yes') {
-        setStep(4); // Skip formal reports
-      } else {
-        setStep(3);
-      }
-    } else if (step === 3) {
-      if (!answers.reports) return;
-      setStep(4);
-    }
-  };
-
-  const handleBack = () => {
-    if (step === 4 && answers.medicare === 'Yes') {
-      setStep(2);
-    } else {
-      setStep(step - 1);
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
-    // Determine recipient
-    let recipient = 'admin@counsellingandclinicalpsychologywa.com.au';
-    if (answers.medicare === 'Yes' || 
-        answers.reports === 'Yes, I need formal certificates/reports.' || 
-        answers.reports === 'Yes, an institution/workplace will be paying for the sessions.' || 
-        answers.reports === 'Yes, both apply.') {
-      recipient = 'celeste@counsellingandclinicalpsychologywa.com.au';
-    }
-
     try {
-      await sendEmail(recipient, 'Individual Therapy Intake', answers);
+      await sendEmail('admin@counsellingandclinicalpsychologywa.com.au', form);
       setSubmitted(true);
     } catch (err) {
       console.error(err);
@@ -315,269 +267,50 @@ const IndividualIntakeFlow = ({ onClose }) => {
           <div className="card-icon" style={{ margin: '0 auto 1.5rem auto', background: '#dcfce7', color: '#16a34a' }}>
             <Check size={32} />
           </div>
-          <h3 className="mb-4">Request Sent</h3>
+          <h3 className="mb-4">{t('requestSent')}</h3>
           <p className="text-muted">{t('successMessage')}</p>
-          <button className="btn btn-primary mt-8" onClick={onClose}>Return to Home</button>
+          <button className="btn btn-primary mt-8" onClick={onClose}>{t('returnHome')}</button>
         </div>
       </Modal>
     );
   }
 
   return (
-    <Modal title={t('indivTherapyTitle')} onClose={onClose}>
-      {step < 4 ? (
-        <div>
-          {step === 1 && (
-            <div className="animate-fade-in">
-              <h4 className="mb-2">What is your primary reason for seeking consultation? *</h4>
-              <textarea className="form-control mb-4" rows="4" value={answers.reason} onChange={e => setAnswers({...answers, reason: e.target.value})} required></textarea>
-              
-              <h4 className="mb-2 mt-4">If you have a relevant prior diagnosis you would like to share, please enter it here.</h4>
-              <textarea className="form-control mb-4" rows="2" value={answers.diagnosis} onChange={e => setAnswers({...answers, diagnosis: e.target.value})}></textarea>
-            </div>
-          )}
-
-          {step === 2 && (
-            <div className="animate-fade-in">
-              <h4 className="mb-4">{t('q2Title')}</h4>
-              <div className="flex flex-col gap-2">
-                {['Yes', 'No', 'Unsure'].map(opt => (
-                  <label key={opt} className="form-check">
-                    <input type="radio" name="medicare" className="form-check-input" checked={answers.medicare === opt} onChange={() => setAnswers({...answers, medicare: opt})} />
-                    <span className="form-check-label font-medium">{t(`opt${opt}`)}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {step === 3 && (
-            <div className="animate-fade-in">
-              <h4 className="mb-4">{t('q4Title')}</h4>
-              <div className="flex flex-col gap-2">
-                {[
-                  { id: 'A', val: 'Yes, I need formal certificates/reports.' },
-                  { id: 'B', val: 'Yes, an institution/workplace will be paying for the sessions.' },
-                  { id: 'C', val: 'Yes, both apply.' },
-                  { id: 'D', val: 'No, neither applies.' }
-                ].map(opt => (
-                  <label key={opt.id} className="form-check">
-                    <input type="radio" name="reports" className="form-check-input" checked={answers.reports === opt.val} onChange={() => setAnswers({...answers, reports: opt.val})} />
-                    <span className="form-check-label font-medium">{t(`optQ4${opt.id}`)}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <div className="flex justify-between mt-8 pt-6 border-t" style={{ borderTop: '1px solid var(--border-color)' }}>
-            {step > 1 ? <button className="btn btn-secondary" onClick={handleBack}><ArrowLeft size={16} className="mr-2"/> {t('back')}</button> : <div></div>}
-            <button className="btn btn-primary" onClick={handleNext} disabled={(step === 1 && !answers.reason) || (step === 2 && !answers.medicare) || (step === 3 && !answers.reports)}>{t('next')}</button>
-          </div>
-        </div>
-      ) : (
-        <form onSubmit={handleSubmit} className="animate-fade-in">
-          {error && <div style={{ color: 'red', marginBottom: '1rem', padding: '1rem', background: '#fee2e2', borderRadius: '8px' }}>{error}</div>}
-          <h4 className="mb-4" style={{ color: 'var(--primary)' }}>Personal Information</h4>
-          <div className="grid md:grid-cols-2 gap-4 mb-8">
-            <input className="form-control" placeholder={t('firstName')} required value={answers.firstName} onChange={e => setAnswers({...answers, firstName: e.target.value})} />
-            <input className="form-control" placeholder={t('lastName')} required value={answers.lastName} onChange={e => setAnswers({...answers, lastName: e.target.value})} />
-            <input className="form-control" placeholder={t('preferredName')} value={answers.preferredName} onChange={e => setAnswers({...answers, preferredName: e.target.value})} />
-            <input className="form-control" placeholder={t('emailAddress')} type="email" required value={answers.email} onChange={e => setAnswers({...answers, email: e.target.value})} />
-            <input className="form-control" placeholder={t('phoneNumber')} required value={answers.phone} onChange={e => setAnswers({...answers, phone: e.target.value})} />
-            <input className="form-control" placeholder={t('countryOfBirth')} value={answers.countryOfBirth} onChange={e => setAnswers({...answers, countryOfBirth: e.target.value})} />
-            <select className="form-control" value={answers.gender} onChange={e => setAnswers({...answers, gender: e.target.value})}>
-              <option value="">{t('gender')}</option>
-              <option value="Male">{t('genderMale')}</option>
-              <option value="Female">{t('genderFemale')}</option>
-              <option value="Non-binary">{t('genderNonBinary')}</option>
-              <option value="Prefer not to say">{t('genderPreferNotToSay')}</option>
-              <option value="Self-describe">{t('genderSelfDescribe')}</option>
-            </select>
-            <select className="form-control" value={answers.pronouns} onChange={e => setAnswers({...answers, pronouns: e.target.value})}>
-              <option value="">{t('pronouns')}</option>
-              <option value="He/Him">{t('pronounsHeHim')}</option>
-              <option value="She/Her">{t('pronounsSheHer')}</option>
-              <option value="They/Them">{t('pronounsTheyThem')}</option>
-              <option value="Prefer not to say">{t('pronounsPreferNotToSay')}</option>
-            </select>
-            <input className="form-control md:col-span-2" placeholder={t('medicareNumber')} value={answers.medicareNumber} onChange={e => setAnswers({...answers, medicareNumber: e.target.value})} />
-            <div className="md:col-span-2">
-              <p className="form-label mb-2">{t('preferredLanguage')}</p>
-              <div className="flex gap-4">
-                {['English', 'Spanish', 'Either'].map(opt => (
-                  <label key={opt} className="form-check flex-1">
-                    <input type="radio" name="preferredLanguage" className="form-check-input" checked={answers.preferredLanguage === opt} onChange={() => setAnswers({...answers, preferredLanguage: opt})} />
-                    <span className="form-check-label">{t(`opt${opt}`)}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <h4 className="mb-4" style={{ color: 'var(--primary)' }}>Emergency Contact</h4>
-          <div className="grid md:grid-cols-2 gap-4 mb-8">
-            <input className="form-control" placeholder={t('firstName')} required value={answers.emergName} onChange={e => setAnswers({...answers, emergName: e.target.value})} />
-            <input className="form-control" placeholder={t('phoneNumber')} required value={answers.emergPhone} onChange={e => setAnswers({...answers, emergPhone: e.target.value})} />
-            <input className="form-control md:col-span-2" placeholder={t('relationshipToYou')} required value={answers.emergRel} onChange={e => setAnswers({...answers, emergRel: e.target.value})} />
-          </div>
-
-          <h4 className="mb-4" style={{ color: 'var(--primary)' }}>{t('sessionPreference')}</h4>
-          <div className="flex gap-4 mb-8">
-            {[{ val: 'In-person', key: 'inPerson' }, { val: 'Phone call', key: 'phoneCall' }, { val: 'Telehealth', key: 'telehealth' }].map(opt => (
-              <label key={opt.val} className="form-check flex-1">
-                <input type="checkbox" className="form-check-input" checked={answers.sessionPreference.includes(opt.val)} onChange={() => {
-                  const updated = answers.sessionPreference.includes(opt.val)
-                    ? answers.sessionPreference.filter(v => v !== opt.val)
-                    : [...answers.sessionPreference, opt.val];
-                  setAnswers({...answers, sessionPreference: updated});
-                }} />
-                <span className="form-check-label">{t(opt.key)}</span>
-              </label>
-            ))}
-          </div>
-          
-          <div className="flex justify-between mt-8 pt-6 border-t" style={{ borderTop: '1px solid var(--border-color)' }}>
-            <button type="button" className="btn btn-secondary" onClick={handleBack}><ArrowLeft size={16} className="mr-2"/> {t('back')}</button>
-            <button type="submit" className="btn btn-primary" disabled={loading}>{loading ? 'Sending...' : t('submit')}</button>
-          </div>
-        </form>
-      )}
-    </Modal>
-  );
-};
-
-const CouplesIntakeForm = ({ onClose }) => {
-  const { t } = useTranslation();
-  const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-    
-    const formData = new FormData(e.target);
-    const data = Object.fromEntries(formData.entries());
-    data.sessionPref = formData.getAll('sessionPref');
-    
-    try {
-      await sendEmail(
-        'admin@counsellingandclinicalpsychologywa.com.au',
-        'Couples Therapy Intake',
-        data
-      );
-      setSubmitted(true);
-    } catch (err) {
-      console.error(err);
-      setError('There was an error submitting the form. Please try again later.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (submitted) {
-    return (
-      <Modal onClose={onClose}>
-        <div className="text-center py-8">
-          <div className="card-icon" style={{ margin: '0 auto 1.5rem auto', background: '#dcfce7', color: '#16a34a' }}>
-            <Check size={32} />
-          </div>
-          <h3 className="mb-4">Request Sent</h3>
-          <p className="text-muted">{t('successMessage')}</p>
-          <button className="btn btn-primary mt-8" onClick={onClose}>Return to Home</button>
-        </div>
-      </Modal>
-    );
-  }
-
-  return (
-    <Modal title="Couples Therapy Intake" onClose={onClose}>
+    <Modal title={t('intakeFormTitle')} onClose={onClose}>
       <form onSubmit={handleSubmit}>
         {error && <div style={{ color: 'red', marginBottom: '1rem', padding: '1rem', background: '#fee2e2', borderRadius: '8px' }}>{error}</div>}
-        <h4 className="mb-4" style={{ color: 'var(--primary)' }}>1. Client 1 (Primary Contact)</h4>
-        <div className="grid md:grid-cols-2 gap-4 mb-8">
-          <input className="form-control" name="client1_firstName" placeholder={t('firstName')} required />
-          <input className="form-control" name="client1_lastName" placeholder={t('lastName')} required />
-          <input className="form-control" name="client1_preferredName" placeholder={t('preferredName')} />
-          <input className="form-control" name="client1_email" placeholder={t('emailAddress')} type="email" required />
-          <input className="form-control" name="client1_phone" placeholder={t('phoneNumber')} required />
-          <input className="form-control" name="client1_countryOfBirth" placeholder={t('countryOfBirth')} />
-          <select className="form-control" name="client1_gender">
-            <option value="">{t('gender')}</option>
-            <option value="Male">{t('genderMale')}</option>
-            <option value="Female">{t('genderFemale')}</option>
-            <option value="Non-binary">{t('genderNonBinary')}</option>
-            <option value="Prefer not to say">{t('genderPreferNotToSay')}</option>
-            <option value="Self-describe">{t('genderSelfDescribe')}</option>
-          </select>
-          <select className="form-control" name="client1_pronouns">
-            <option value="">{t('pronouns')}</option>
-            <option value="He/Him">{t('pronounsHeHim')}</option>
-            <option value="She/Her">{t('pronounsSheHer')}</option>
-            <option value="They/Them">{t('pronounsTheyThem')}</option>
-            <option value="Prefer not to say">{t('pronounsPreferNotToSay')}</option>
-          </select>
-          <div className="md:col-span-2">
-            <p className="form-label mb-2">{t('preferredLanguage')}</p>
-            <div className="flex gap-4">
-              {['English', 'Spanish', 'Either'].map(opt => (
-                <label key={opt} className="form-check flex-1">
-                  <input type="radio" name="client1_preferredLanguage" value={opt} className="form-check-input" />
-                  <span className="form-check-label">{t(`opt${opt}`)}</span>
-                </label>
-              ))}
-            </div>
-          </div>
+
+        <p className="form-label mb-2">{t('therapyType')}</p>
+        <div className="flex gap-4 mb-6">
+          <label className="form-check flex-1">
+            <input type="radio" name="therapyType" className="form-check-input" checked={form.therapyType === 'individual'} onChange={() => setForm({...form, therapyType: 'individual'})} />
+            <span className="form-check-label font-medium">{t('individualTherapyBtn')}</span>
+          </label>
+          <label className="form-check flex-1">
+            <input type="radio" name="therapyType" className="form-check-input" checked={form.therapyType === 'couples'} onChange={() => setForm({...form, therapyType: 'couples'})} />
+            <span className="form-check-label font-medium">{t('couplesTherapyBtn')}</span>
+          </label>
         </div>
 
-        <h4 className="mb-4" style={{ color: 'var(--primary)' }}>2. Client 2</h4>
-        <div className="grid md:grid-cols-2 gap-4 mb-8">
-          <input className="form-control" name="client2_firstName" placeholder={t('firstName')} />
-          <input className="form-control" name="client2_lastName" placeholder={t('lastName')} />
-          <input className="form-control" name="client2_preferredName" placeholder={t('preferredName')} />
-          <input className="form-control" name="client2_email" placeholder={t('emailAddress')} type="email" />
-          <input className="form-control" name="client2_phone" placeholder={t('phoneNumber')} required />
-          <input className="form-control" name="client2_countryOfBirth" placeholder={t('countryOfBirth')} />
-          <select className="form-control" name="client2_gender">
-            <option value="">{t('gender')}</option>
-            <option value="Male">{t('genderMale')}</option>
-            <option value="Female">{t('genderFemale')}</option>
-            <option value="Non-binary">{t('genderNonBinary')}</option>
-            <option value="Prefer not to say">{t('genderPreferNotToSay')}</option>
-            <option value="Self-describe">{t('genderSelfDescribe')}</option>
-          </select>
-          <select className="form-control" name="client2_pronouns">
-            <option value="">{t('pronouns')}</option>
-            <option value="He/Him">{t('pronounsHeHim')}</option>
-            <option value="She/Her">{t('pronounsSheHer')}</option>
-            <option value="They/Them">{t('pronounsTheyThem')}</option>
-            <option value="Prefer not to say">{t('pronounsPreferNotToSay')}</option>
-          </select>
-          <div className="md:col-span-2">
-            <p className="form-label mb-2">{t('preferredLanguage')}</p>
-            <div className="flex gap-4">
-              {['English', 'Spanish', 'Either'].map(opt => (
-                <label key={opt} className="form-check flex-1">
-                  <input type="radio" name="client2_preferredLanguage" value={opt} className="form-check-input" />
-                  <span className="form-check-label">{t(`opt${opt}`)}</span>
-                </label>
-              ))}
-            </div>
-          </div>
+        <div className="flex flex-col gap-3 mb-6">
+          <label className="form-check">
+            <input type="checkbox" className="form-check-input" checked={form.medicare === 'yes'} onChange={() => setForm({...form, medicare: form.medicare === 'yes' ? 'no' : 'yes'})} />
+            <span className="form-check-label font-medium">{t('hasMedicare')}</span>
+          </label>
+          <label className="form-check">
+            <input type="checkbox" className="form-check-input" checked={form.ndis === 'yes'} onChange={() => setForm({...form, ndis: form.ndis === 'yes' ? 'no' : 'yes'})} />
+            <span className="form-check-label font-medium">{t('hasNDIS')}</span>
+          </label>
+          <label className="form-check">
+            <input type="checkbox" className="form-check-input" checked={form.certificates === 'yes'} onChange={() => setForm({...form, certificates: form.certificates === 'yes' ? 'no' : 'yes'})} />
+            <span className="form-check-label font-medium">{t('needsReports')}</span>
+          </label>
         </div>
 
-        <h4 className="mb-4" style={{ color: 'var(--primary)' }}>3. {t('sessionPreference')}</h4>
-        <div className="flex gap-4 mb-8">
-           {[{ val: 'In-person', key: 'inPerson' }, { val: 'Phone call', key: 'phoneCall' }, { val: 'Telehealth', key: 'telehealth' }].map(opt => (
-             <label key={opt.val} className="form-check flex-1">
-               <input type="checkbox" name="sessionPref" value={opt.val} className="form-check-input" />
-               <span className="form-check-label">{t(opt.key)}</span>
-             </label>
-           ))}
-        </div>
+        <input className="form-control mb-4" type="text" placeholder={t('yourNamePlaceholder')} value={form.name} onChange={e => setForm({...form, name: e.target.value})} />
         
+        <input className="form-control mb-8" type="email" placeholder={t('emailAddress')} required value={form.email} onChange={e => setForm({...form, email: e.target.value})} />
+
         <button type="submit" className="btn btn-primary w-full" style={{ width: '100%' }} disabled={loading}>
           {loading ? 'Sending...' : t('submit')}
         </button>

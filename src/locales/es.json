@@ -1,5 +1,5 @@
 {
-  "bookAppointmentBtn": "Reservar Cita",
+  "bookAppointmentBtn": "Consultar disponibilidad",
   "exploreServices": "Explorar Servicios",
   "location": "Ubicación",
   "servicesTitle": "Servicios de Terapia",
@@ -121,5 +121,14 @@
   "pronounsHeHim": "Él/Él",
   "pronounsSheHer": "Ella/Ella",
   "pronounsTheyThem": "Ellos/Ellas",
-  "pronounsPreferNotToSay": "Prefiero no decir"
+  "pronounsPreferNotToSay": "Prefiero no decir",
+  "intakeFormTitle": "Solicitud de Contacto",
+  "requestSent": "Solicitud Enviada",
+  "returnHome": "Volver al Inicio",
+  "yourName": "Un nombre para referirnos a ti",
+  "yourNamePlaceholder": "Tu nombre o apodo",
+  "therapyType": "¿Qué tipo de terapia está buscando?",
+  "hasMedicare": "Tengo Medicare",
+  "hasNDIS": "Tengo financiación NDIS",
+  "needsReports": "Requeriré formularios o certificados"
 }

@@ -3,26 +3,20 @@ import emailjs from '@emailjs/browser';
 /**
  * Sends an email using EmailJS.
  *
- * @param {string} recipientEmail - The target email address (e.g. matias@, celeste@, admin@).
- * @param {string} formType - The type of form (e.g. 'Couples Intake', 'Individual Intake').
- * @param {Object} formData - The data collected from the form.
+ * @param {string} recipientEmail - The target email address (e.g. admin@).
+ * @param {Object} formData - The data collected from the form (name, therapyType, medicare, ndis, certificates, email).
  * @returns {Promise} Resolves when the email is sent successfully.
  */
-export const sendEmail = async (recipientEmail, formType, formData) => {
+export const sendEmail = async (recipientEmail, formData) => {
   // You will need to replace these with your actual EmailJS credentials
   const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || 'YOUR_SERVICE_ID';
   const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'YOUR_PUBLIC_KEY';
-  
-  // Select the appropriate template based on the form type
-  const TEMPLATE_ID = formType === 'Couples Therapy Intake'
-    ? import.meta.env.VITE_EMAILJS_TEMPLATE_ID_COUPLES
-    : import.meta.env.VITE_EMAILJS_TEMPLATE_ID_INDIVIDUAL;
+  const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'YOUR_TEMPLATE_ID';
 
   // We pass the recipientEmail to the template so EmailJS knows where to send it.
   // In your EmailJS template, you MUST set the "To Email" field to {{to_email}}
   const templateParams = {
     to_email: recipientEmail,
-    form_type: formType,
     ...formData,
   };
 
