@@ -113,7 +113,7 @@ a:hover {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border-color);
-  padding: 1rem 0;
+  padding: 1rem 20px;
   transition: var(--transition);
 }
 
@@ -126,7 +126,7 @@ a:hover {
 .hero {
   background: radial-gradient(circle at 100% 0%, var(--primary-bg) 0%, transparent 50%),
               radial-gradient(circle at 0% 100%, var(--primary-bg) 0%, transparent 50%);
-  min-height: 80vh;
+  min-height: 60vh;
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -146,27 +146,6 @@ a:hover {
   font-size: 1.25rem;
   color: var(--text-muted);
   margin-bottom: 2rem;
-  max-width: 600px;
-}
-
-.hero-image-wrapper {
-  position: relative;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  box-shadow: var(--shadow-lg);
-  transform: perspective(1000px) rotateY(-5deg);
-  transition: var(--transition);
-}
-
-.hero-image-wrapper:hover {
-  transform: perspective(1000px) rotateY(0deg) scale(1.02);
-  box-shadow: var(--shadow-glow);
-}
-
-.hero-image {
-  width: 100%;
-  height: auto;
-  display: block;
 }
 
 /* Buttons */
@@ -440,11 +419,67 @@ a:hover {
 }
 
 /* Image overrides for professionals */
+.prof-header {
+  text-align: center;
+}
+
 .prof-image {
   width: 120px;
   height: 120px;
   border-radius: 50%;
   object-fit: cover;
   border: 4px solid var(--primary-bg);
-  margin-bottom: 1.5rem;
+  margin: 0 auto 1.5rem auto;
+  display: block;
+}
+
+/* Collapsible content (mobile only) */
+.collapsible {
+  display: none;
+}
+
+.collapsible.expanded {
+  display: block;
+}
+
+.collapsible-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.6rem 1rem;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--primary);
+  background: var(--primary-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.collapsible-toggle:hover {
+  background: var(--primary-light);
+  color: #fff;
+}
+
+.collapsible-toggle svg {
+  transition: transform 0.3s ease;
+}
+
+.collapsible-toggle svg.chevron-open {
+  transform: rotate(180deg);
+}
+
+@media (min-width: 768px) {
+  .collapsible {
+    display: block;
+  }
+
+  .collapsible-toggle {
+    display: none !important;
+  }
 }

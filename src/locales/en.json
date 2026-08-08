@@ -128,6 +128,8 @@
   "yourName": "A name for us to call you",
   "yourNamePlaceholder": "Your name or nickname",
   "therapyType": "What type of therapy are you looking for?",
+  "seeMore": "See More",
+  "seeLess": "See Less",
   "hasMedicare": "I have Medicare",
   "hasNDIS": "I have NDIS funding",
   "needsReports": "I will require forms or certificates"

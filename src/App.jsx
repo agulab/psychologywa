@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { MapPin, ArrowRight, User, Check, X, Heart, Shield, Sparkles } from 'lucide-react';
+import { MapPin, ArrowRight, User, Check, X, Heart, Shield, Sparkles, ChevronDown } from 'lucide-react';
 import { sendEmail } from './emailService';
 import ComingSoon from './ComingSoon';
 import logo from './assets/logo.png';
@@ -48,7 +48,7 @@ const MainSite = () => {
 
       {/* Hero Section */}
       <section className="hero">
-        <div className="container grid md:grid-cols-2 items-center gap-12">
+        <div className="container">
           <div className="animate-slide-up">
             <span className="badge">Perth, WA, Australia</span>
             <h1 className="hero-title">
@@ -67,10 +67,6 @@ const MainSite = () => {
                 <MapPin className="mr-2" size={18} /> {t('location')}
               </a>
             </div>
-          </div>
-          
-          <div className="hero-image-wrapper animate-fade-in" style={{ animationDelay: '0.2s' }}>
-            <img src="/phones.jpeg" alt="Emergency Contacts" className="hero-image" />
           </div>
         </div>
       </section>
@@ -141,32 +137,52 @@ const MainSite = () => {
             
             {/* Matias */}
             <div className="card">
-              <img src="/Matias.png" alt="Matías de Ambrosio" className="prof-image" />
-              <h3 className="card-title" style={{ color: 'var(--primary)' }}>Matías de Ambrosio</h3>
-              <span className="badge mb-4">{t('matiasTitle')}</span>
+              <div className="prof-header">
+                <img src="/Matias.png" alt="Matías de Ambrosio" className="prof-image" />
+                <h3 className="card-title" style={{ color: 'var(--primary)' }}>Matías de Ambrosio</h3>
+                <span className="badge mb-4">{t('matiasTitle')}</span>
+              </div>
               <p className="mb-4">{t('matiasBio1')}</p>
-              <div className="mb-4">
-                <strong className="block mb-2">{t('matiasHospitalTitle')}</strong>
-                <p className="text-muted text-sm">{t('matiasHospitalBio')}</p>
-              </div>
-              <div className="mb-4">
-                <strong className="block mb-2">{t('matiasAcademicTitle')}</strong>
-                <p className="text-muted text-sm">{t('matiasAcademicBio')}</p>
-              </div>
-              <div className="mb-4">
-                <strong className="block mb-2">{t('matiasCulturalTitle')}</strong>
-                <p className="text-muted text-sm">{t('matiasCulturalBio')}</p>
-              </div>
+              <Collapsible
+                moreText={t('seeMore')}
+                lessText={t('seeLess')}
+                extra={
+                  <>
+                    <div className="mb-4">
+                      <strong className="block mb-2">{t('matiasHospitalTitle')}</strong>
+                      <p className="text-muted text-sm">{t('matiasHospitalBio')}</p>
+                    </div>
+                    <div className="mb-4">
+                      <strong className="block mb-2">{t('matiasAcademicTitle')}</strong>
+                      <p className="text-muted text-sm">{t('matiasAcademicBio')}</p>
+                    </div>
+                    <div className="mb-4">
+                      <strong className="block mb-2">{t('matiasCulturalTitle')}</strong>
+                      <p className="text-muted text-sm">{t('matiasCulturalBio')}</p>
+                    </div>
+                  </>
+                }
+              />
             </div>
 
             {/* Celeste */}
             <div className="card">
-              <img src="/Celeste2.jpeg" alt="Celeste Labaronnie" className="prof-image" />
-              <h3 className="card-title" style={{ color: 'var(--primary)' }}>Celeste Labaronnie</h3>
-              <span className="badge mb-4">{t('celesteTitle')}</span>
+              <div className="prof-header">
+                <img src="/Celeste2.jpeg" alt="Celeste Labaronnie" className="prof-image" />
+                <h3 className="card-title" style={{ color: 'var(--primary)' }}>Celeste Labaronnie</h3>
+                <span className="badge mb-4">{t('celesteTitle')}</span>
+              </div>
               <p className="mb-4">{t('celesteBio1')}</p>
-              <p className="mb-4 text-muted text-sm">{t('celesteBio2')}</p>
-              <p className="mb-4 text-muted text-sm">{t('celesteBio3')}</p>
+              <Collapsible
+                moreText={t('seeMore')}
+                lessText={t('seeLess')}
+                extra={
+                  <>
+                    <p className="mb-4 text-muted text-sm">{t('celesteBio2')}</p>
+                    <p className="mb-4 text-muted text-sm">{t('celesteBio3')}</p>
+                  </>
+                }
+              />
             </div>
 
           </div>
@@ -207,10 +223,7 @@ const MainSite = () => {
 
       {/* Modals Rendering */}
       {activeModal && (
-        <IntakeForm
-          onClose={closeModal}
-          defaultTherapyType={activeModal === 'couplesForm' ? 'couples' : 'individual'}
-        />
+        <IntakeForm onClose={closeModal} />
       )}
 
       
@@ -230,11 +243,31 @@ const Modal = ({ title, onClose, children }) => (
 );
 
 
-const IntakeForm = ({ onClose, defaultTherapyType }) => {
+const Collapsible = ({ extra, moreText, lessText }) => {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <div>
+      <div className={`collapsible ${expanded ? 'expanded' : ''}`}>
+        {extra}
+      </div>
+      <button
+        type="button"
+        className="collapsible-toggle md:hidden"
+        onClick={() => setExpanded(!expanded)}
+      >
+        <span>{expanded ? lessText : moreText}</span>
+        <ChevronDown size={16} className={expanded ? 'chevron-open' : ''} />
+      </button>
+    </div>
+  );
+};
+
+const IntakeForm = ({ onClose }) => {
   const { t } = useTranslation();
   const [form, setForm] = useState({
     name: '',
-    therapyType: defaultTherapyType || 'individual',
+    therapyType: 'individual',
     medicare: 'no',
     ndis: 'no',
     certificates: 'no',

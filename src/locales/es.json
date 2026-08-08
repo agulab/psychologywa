@@ -128,6 +128,8 @@
   "yourName": "Un nombre para referirnos a ti",
   "yourNamePlaceholder": "Tu nombre o apodo",
   "therapyType": "¿Qué tipo de terapia está buscando?",
+  "seeMore": "Ver más",
+  "seeLess": "Ver menos",
   "hasMedicare": "Tengo Medicare",
   "hasNDIS": "Tengo financiación NDIS",
   "needsReports": "Requeriré formularios o certificados"
