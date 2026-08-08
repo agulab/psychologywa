@@ -4,6 +4,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { MapPin, ArrowRight, User, Users, Check, X, ArrowLeft, Heart, Shield, Sparkles } from 'lucide-react';
 import { sendEmail } from './emailService';
 import ComingSoon from './ComingSoon';
+import logo from './assets/logo.png';
 
 const App = () => (
   <Routes>
@@ -34,7 +35,7 @@ const MainSite = () => {
     <div className="app">
       {/* Header */}
       <header className="header container flex justify-between items-center">
-        <img src="/logo.jpeg" alt="Counselling and Clinical Psychology WA" className="logo" />
+        <img src={logo} alt="Counselling and Clinical Psychology WA" className="logo" />
         <div className="flex items-center gap-4">
           <button className="btn btn-ghost" onClick={toggleLanguage}>
             {i18n.language.startsWith('en') ? 'Español' : 'English'}
@@ -199,7 +200,7 @@ const MainSite = () => {
       {/* Footer */}
       <footer className="py-12 border-t" style={{ borderTop: '1px solid var(--border-color)' }}>
         <div className="container text-center text-muted">
-          <img src="/logo.jpeg" alt="Logo" style={{ height: 40, margin: '0 auto 1rem auto', filter: 'grayscale(1)', opacity: 0.5 }} />
+          <img src={logo} alt="Logo" style={{ height: 40, margin: '0 auto 1rem auto', filter: 'grayscale(1)', opacity: 0.5 }} />
           <p>&copy; {new Date().getFullYear()} Counselling and Clinical Psychology WA. All rights reserved.</p>
         </div>
       </footer>

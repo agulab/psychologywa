@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import logo from './assets/logo.png';
 
 const ComingSoon = () => {
   const { i18n } = useTranslation();
@@ -36,9 +37,9 @@ const ComingSoon = () => {
       </button>
 
       <img
-        src="/logo.jpeg"
+        src={logo}
         alt="Counselling and Clinical Psychology WA"
-        style={{ height: 80, marginBottom: '2rem', borderRadius: '16px' }}
+        style={{ height: 120, marginBottom: '0rem', borderRadius: '16px' }}
       />
 
       <h1 style={{
