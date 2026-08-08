@@ -12,7 +12,7 @@ const ComingSoon = () => {
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      background: 'linear-gradient(134deg, rgb(107 114 128 / 50%) 0%, #7e63bcd6 100%)',
+      background: 'linear-gradient(134deg, rgb(190 194 203 / 50%) 0%, rgb(255 255 255 / 84%) 100%)',
       padding: '2rem',
       textAlign: 'center'
     }}>
