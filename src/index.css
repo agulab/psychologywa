@@ -126,7 +126,7 @@ a:hover {
 .hero {
   background: radial-gradient(circle at 100% 0%, var(--primary-bg) 0%, transparent 50%),
               radial-gradient(circle at 0% 100%, var(--primary-bg) 0%, transparent 50%);
-  min-height: 60vh;
+  min-height: 50vh;
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -208,6 +208,14 @@ a:hover {
   height: 100%;
   display: flex;
   flex-direction: column;
+
+  p {
+    margin-top: 0.5rem;
+  }
+}
+
+.card-list {
+  padding-left: 1rem;
 }
 
 .card:hover {
@@ -226,6 +234,17 @@ a:hover {
   align-items: center;
   justify-content: center;
   margin-bottom: 1.5rem;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.card-header .card-icon {
+  margin-bottom: 0;
 }
 
 .card-title {
@@ -472,14 +491,4 @@ a:hover {
 
 .collapsible-toggle svg.chevron-open {
   transform: rotate(180deg);
-}
-
-@media (min-width: 768px) {
-  .collapsible {
-    display: block;
-  }
-
-  .collapsible-toggle {
-    display: none !important;
-  }
 }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { MapPin, ArrowRight, User, Check, X, Heart, Shield, Sparkles, ChevronDown } from 'lucide-react';
+import { MapPin, ArrowRight, User, Check, X, Heart, Shield, Sparkles, ChevronDown, BookHeart, BriefcaseBusiness, Accessibility } from 'lucide-react';
 import { sendEmail } from './emailService';
 import ComingSoon from './ComingSoon';
 import logo from './assets/logo.png';
@@ -40,9 +40,9 @@ const MainSite = () => {
           <button className="btn btn-ghost" onClick={toggleLanguage}>
             {i18n.language.startsWith('en') ? 'Español' : 'English'}
           </button>
-          <a href="#services" className="btn btn-primary" style={{ padding: '0.5rem 1.5rem' }}>
+          <button className="btn btn-primary" style={{ padding: '0.5rem 1.5rem' }} onClick={() => setActiveModal('individualIntake')}>
             {t('bookAppointmentBtn')}
-          </a>
+          </button>
         </div>
       </header>
 
@@ -50,9 +50,9 @@ const MainSite = () => {
       <section className="hero">
         <div className="container">
           <div className="animate-slide-up">
-            <span className="badge">Perth, WA, Australia</span>
+            <span className="badge">49 Cedric Street, Stirling, WA 6021</span>
             <h1 className="hero-title">
-              {i18n.language.startsWith('en') ? 'A safe space for your healing journey.' : 'Un espacio seguro para tu sanación.'}
+              {i18n.language.startsWith('en') ? 'Counselling & Clinical Psychology WA' : 'Counseloría y Psicología Clínica WA'}
             </h1>
             <p className="hero-subtitle">
               {i18n.language.startsWith('en') ? 
@@ -63,7 +63,7 @@ const MainSite = () => {
               <a href="#services" className="btn btn-primary">
                 {t('exploreServices')} <ArrowRight className="ml-2" size={18} />
               </a>
-              <a href="https://maps.google.com/?q=Counselling+and+Clinical+Psychology+WA+Perth" target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
+              <a href="https://maps.app.goo.gl/Ama3MT9mm8c3f3fT6" target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
                 <MapPin className="mr-2" size={18} /> {t('location')}
               </a>
             </div>
@@ -195,19 +195,53 @@ const MainSite = () => {
           <h2 className="section-title">{t('feesRebates')}</h2>
           <div className="grid md:grid-cols-3 gap-8 mt-12">
             <div className="card" style={{ padding: '2rem' }}>
-              <div className="card-icon" style={{ width: 48, height: 48 }}><Shield size={24} /></div>
-              <h3 className="mb-4">{t('medicare')}</h3>
-              <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('medicareText')}</p>
+              <div className="card-header">
+                <div className="card-icon" style={{ width: 48, height: 48 }}><Shield size={24} /></div>
+                <h3 className="mb-0">{t('medicare')}</h3>
+              </div>
+              <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('medicareText1')}</p>
+              <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('medicareText2')}</p>
             </div>
             <div className="card" style={{ padding: '2rem' }}>
-              <div className="card-icon" style={{ width: 48, height: 48 }}><Heart size={24} /></div>
-              <h3 className="mb-4">{t('couplesTherapyFees')}</h3>
+              <div className="card-header">
+                <div className="card-icon" style={{ width: 48, height: 48 }}><Heart size={24} /></div>
+                <h3 className="mb-0">{t('couplesTherapyFees')}</h3>
+              </div>
               <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('couplesTherapyFeesText')}</p>
             </div>
             <div className="card" style={{ padding: '2rem' }}>
-              <div className="card-icon" style={{ width: 48, height: 48 }}><Sparkles size={24} /></div>
-              <h3 className="mb-4">{t('ndisFunding')}</h3>
-              <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('ndisFundingText')}</p>
+              <div className="card-header">
+                <div className="card-icon" style={{ width: 48, height: 48 }}><Accessibility size={24} /></div>
+                <h3 className="mb-0">{t('ndisFunding')}</h3>
+              </div>
+              <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('ndisFundingText1')}</p>
+              <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('ndisFundingText2')}</p>
+            </div>
+
+            <div className="card" style={{ padding: '2rem' }}>
+              <div className="card-header">
+                <div className="card-icon" style={{ width: 48, height: 48 }}><BriefcaseBusiness size={24} /></div>
+                <h3 className="mb-0">{t('workCover')}</h3>
+              </div>
+              <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('workCoverText1')}</p>
+              <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('workCoverText2')}</p>
+              <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('workCoverText3')}</p>
+            </div>
+            <div className="card" style={{ padding: '2rem' }}>
+              <div className="card-header">
+                <div className="card-icon" style={{ width: 48, height: 48 }}><BookHeart size={24} /></div>
+                <h3 className="mb-0">{t('privateHealth')}</h3>
+              </div>
+              <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('privateHealthText1')}</p>
+              <ul className="card-list">
+                <li>
+                  <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('privateHealthText2')}</p>
+                </li>
+                <li>
+                  <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('privateHealthText3')}</p>
+                </li>
+              </ul>
+              <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('privateHealthText4')}</p>
             </div>
           </div>
         </div>
@@ -223,7 +257,7 @@ const MainSite = () => {
 
       {/* Modals Rendering */}
       {activeModal && (
-        <IntakeForm onClose={closeModal} />
+        <IntakeForm onClose={closeModal} initialTherapyType={activeModal === 'couplesForm' ? 'couples' : 'individual'} />
       )}
 
       
@@ -253,7 +287,7 @@ const Collapsible = ({ extra, moreText, lessText }) => {
       </div>
       <button
         type="button"
-        className="collapsible-toggle md:hidden"
+        className="collapsible-toggle"
         onClick={() => setExpanded(!expanded)}
       >
         <span>{expanded ? lessText : moreText}</span>
@@ -263,11 +297,11 @@ const Collapsible = ({ extra, moreText, lessText }) => {
   );
 };
 
-const IntakeForm = ({ onClose }) => {
+const IntakeForm = ({ onClose, initialTherapyType = 'individual' }) => {
   const { t } = useTranslation();
   const [form, setForm] = useState({
     name: '',
-    therapyType: 'individual',
+    therapyType: initialTherapyType,
     medicare: 'no',
     ndis: 'no',
     certificates: 'no',
@@ -325,20 +359,22 @@ const IntakeForm = ({ onClose }) => {
           </label>
         </div>
 
-        <div className="flex flex-col gap-3 mb-6">
-          <label className="form-check">
-            <input type="checkbox" className="form-check-input" checked={form.medicare === 'yes'} onChange={() => setForm({...form, medicare: form.medicare === 'yes' ? 'no' : 'yes'})} />
-            <span className="form-check-label font-medium">{t('hasMedicare')}</span>
-          </label>
-          <label className="form-check">
-            <input type="checkbox" className="form-check-input" checked={form.ndis === 'yes'} onChange={() => setForm({...form, ndis: form.ndis === 'yes' ? 'no' : 'yes'})} />
-            <span className="form-check-label font-medium">{t('hasNDIS')}</span>
-          </label>
-          <label className="form-check">
-            <input type="checkbox" className="form-check-input" checked={form.certificates === 'yes'} onChange={() => setForm({...form, certificates: form.certificates === 'yes' ? 'no' : 'yes'})} />
-            <span className="form-check-label font-medium">{t('needsReports')}</span>
-          </label>
-        </div>
+        {form.therapyType === 'individual' && (
+          <div className="flex flex-col gap-3 mb-6">
+            <label className="form-check">
+              <input type="checkbox" className="form-check-input" checked={form.medicare === 'yes'} onChange={() => setForm({...form, medicare: form.medicare === 'yes' ? 'no' : 'yes'})} />
+              <span className="form-check-label font-medium">{t('hasMedicare')}</span>
+            </label>
+            <label className="form-check">
+              <input type="checkbox" className="form-check-input" checked={form.ndis === 'yes'} onChange={() => setForm({...form, ndis: form.ndis === 'yes' ? 'no' : 'yes'})} />
+              <span className="form-check-label font-medium">{t('hasNDIS')}</span>
+            </label>
+            <label className="form-check">
+              <input type="checkbox" className="form-check-input" checked={form.certificates === 'yes'} onChange={() => setForm({...form, certificates: form.certificates === 'yes' ? 'no' : 'yes'})} />
+              <span className="form-check-label font-medium">{t('needsReports')}</span>
+            </label>
+          </div>
+        )}
 
         <input className="form-control mb-4" type="text" placeholder={t('yourNamePlaceholder')} value={form.name} onChange={e => setForm({...form, name: e.target.value})} />
         
