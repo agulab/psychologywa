@@ -481,7 +481,7 @@ const IntakeForm = ({ onClose, initialTherapyType = 'individual' }) => {
 
         <div className="form-section">
           <h4 className="form-section-title">{t('formSectionTherapyType')}</h4>
-          <div className="flex gap-3">
+          <div className="flex gap-8">
             <label className="form-check flex-1">
               <input type="radio" name="therapyType" className="form-check-input" checked={form.therapyType === 'individual'} onChange={() => setForm({...form, therapyType: 'individual'})} />
               <span className="form-check-label font-medium">{t('individualTherapyBtn')}</span>
