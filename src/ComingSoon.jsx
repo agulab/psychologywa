@@ -50,7 +50,7 @@ const ComingSoon = () => {
         margin: 0,
         lineHeight: 1.3
       }}>
-        Counselling & Clinical Psychology WA
+        Counselling and Clinical Psychology WA
       </h1>
 
       <div style={{
