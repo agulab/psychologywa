@@ -1,20 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Routes, Route, Navigate, Link } from 'react-router-dom';
+import { Routes, Route, Navigate, Link, useLocation } from 'react-router-dom';
 import { MapPin, ArrowRight, User, Check, X, Heart, Shield, ChevronDown, BookHeart, BriefcaseBusiness, HeartHandshake } from 'lucide-react';
 import { sendEmail } from './emailService';
 import ComingSoon from './ComingSoon';
 import LegalPage from './LegalPage';
 import logo from './assets/logo.png';
 
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+};
+
 const App = () => (
-  <Routes>
-    <Route path="/" element={<ComingSoon />} />
-    <Route path="/soon" element={<MainSite />} />
-    <Route path="/privacy" element={<PrivacyPolicy />} />
-    <Route path="/terms" element={<TermsConditions />} />
-    <Route path="*" element={<Navigate to="/" replace />} />
-  </Routes>
+  <>
+    <ScrollToTop />
+    <Routes>
+      <Route path="/" element={<ComingSoon />} />
+      <Route path="/soon" element={<MainSite />} />
+      <Route path="/privacy" element={<PrivacyPolicy />} />
+      <Route path="/terms" element={<TermsConditions />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  </>
 );
 
 const PrivacyPolicy = () => {
