@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import { BookHeart, BriefcaseBusiness, Check, ChevronDown, Heart, HeartHandshake, MapPin, Shield, User, X } from 'lucide-react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Routes, Route, Navigate, Link } from 'react-router-dom';
-import { MapPin, ArrowRight, User, Check, X, Heart, Shield, ChevronDown, BookHeart, BriefcaseBusiness, HeartHandshake } from 'lucide-react';
-import { sendEmail } from './emailService';
+import { Link, Navigate, Route, Routes } from 'react-router-dom';
 import ComingSoon from './ComingSoon';
 import LegalPage from './LegalPage';
 import logo from './assets/logo.png';
+import { sendEmail } from './emailService';
 
 const App = () => (
   <Routes>
@@ -85,15 +85,23 @@ const MainSite = () => {
   return (
     <div className="app">
       {/* Header */}
-      <header className="header container flex justify-between items-center">
-        <img src={logo} alt="Counselling and Clinical Psychology WA" className="logo" />
-        <div className="flex items-center gap-4">
-          <button className="btn btn-ghost" onClick={toggleLanguage}>
-            {i18n.language.startsWith('en') ? 'Español' : 'English'}
-          </button>
-          <button className="btn btn-primary" style={{ padding: '0.5rem 1.5rem' }} onClick={() => setActiveModal('individualIntake')}>
-            {t('bookAppointmentBtn')}
-          </button>
+      <header className="header">
+        <div className="container flex justify-between items-center">
+          <div className="logo-wrap">
+            <img src={logo} alt="Counselling and Clinical Psychology WA" className="logo" />
+            <div className="logo-text">
+              <span>Counselling and Clinical</span>
+              <span>Psychology WA</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-4">
+            <button className="btn btn-ghost" onClick={toggleLanguage}>
+              {i18n.language.startsWith('en') ? 'Español' : 'English'}
+            </button>
+            <button className="btn btn-primary" onClick={() => setActiveModal('individualIntake')}>
+              {t('bookAppointmentBtn')}
+            </button>
+          </div>
         </div>
       </header>
 
@@ -297,13 +305,14 @@ const MainSite = () => {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 border-t" style={{ borderTop: '1px solid var(--border-color)' }}>
+      <footer className="py-8 border-t" style={{ borderTop: '1px solid var(--border-color)' }}>
         <div className="container text-center text-muted">
-          <img src={logo} alt="Logo" style={{ height: 40, margin: '0 auto 1rem auto', filter: 'grayscale(1)', opacity: 0.5 }} />
-          <p>&copy; {new Date().getFullYear()} Counselling and Clinical Psychology WA. All rights reserved.</p>
+          <div className="footer-inner">
+            <img src={logo} alt="Logo" className="footer-logo" />
+            <p>&copy; {new Date().getFullYear()} Counselling and Clinical Psychology WA. All rights reserved.</p>
+          </div>
           <div className="legal-links">
             <Link to="/privacy">{t('privacyPolicy')}</Link>
-            <span className="legal-separator">·</span>
             <Link to="/terms">{t('termsConditions')}</Link>
           </div>
         </div>

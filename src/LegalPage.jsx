@@ -13,14 +13,20 @@ const LegalPage = ({ title, lastUpdated, intro, sections }) => {
 
   return (
     <div className="app">
-      <header className="header container flex justify-between items-center">
-        <Link to="/soon">
-          <img src={logo} alt="Counselling and Clinical Psychology WA" className="logo" />
-        </Link>
-        <div className="flex items-center gap-4">
-          <button className="btn btn-ghost" onClick={toggleLanguage}>
-            {i18n.language.startsWith('en') ? 'Español' : 'English'}
-          </button>
+      <header className="header">
+        <div className="container flex justify-between items-center">
+          <Link to="/soon" className="logo-wrap">
+            <img src={logo} alt="Counselling and Clinical Psychology WA" className="logo" />
+            <div className="logo-text">
+              <span>Counselling and Clinical</span>
+              <span>Psychology WA</span>
+            </div>
+          </Link>
+          <div className="flex items-center gap-4">
+            <button className="btn btn-ghost" onClick={toggleLanguage}>
+              {i18n.language.startsWith('en') ? 'Español' : 'English'}
+            </button>
+          </div>
         </div>
       </header>
 
@@ -43,7 +49,7 @@ const LegalPage = ({ title, lastUpdated, intro, sections }) => {
         </div>
       </main>
 
-      <footer className="py-12 border-t" style={{ borderTop: '1px solid var(--border-color)' }}>
+      <footer className="py-8 border-t" style={{ borderTop: '1px solid var(--border-color)' }}>
         <div className="container text-center text-muted">
           <p>&copy; {new Date().getFullYear()} Counselling and Clinical Psychology WA. All rights reserved.</p>
         </div>
