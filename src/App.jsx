@@ -21,8 +21,8 @@ const App = () => (
   <>
     <ScrollToTop />
     <Routes>
-      <Route path="/" element={<ComingSoon />} />
-      <Route path="/soon" element={<MainSite />} />
+      <Route path="/" element={<MainSite />} />
+      <Route path="/soon" element={<ComingSoon />} />
       <Route path="/privacy" element={<PrivacyPolicy />} />
       <Route path="/terms" element={<TermsConditions />} />
       <Route path="*" element={<Navigate to="/" replace />} />
