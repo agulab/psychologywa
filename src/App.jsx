@@ -87,6 +87,9 @@ const MainSite = () => {
   // Mobile tab state for Services
   const [activeServiceTab, setActiveServiceTab] = useState('individual');
 
+  // Any professional card expanded
+  const [profExpanded, setProfExpanded] = useState(false);
+
   const toggleLanguage = () => {
     i18n.changeLanguage(i18n.language.startsWith('en') ? 'es' : 'en');
   };
@@ -121,9 +124,6 @@ const MainSite = () => {
       {/* Hero Section */}
       <section className="hero">
         <div className="container">
-            <a href="https://maps.app.goo.gl/Ama3MT9mm8c3f3fT6" target="_blank" rel="noopener noreferrer" className="badge hero-location btn-secondary">
-              <MapPin className="mr-2 hero-location-icon" size={18} />49 Cedric Street, Stirling, WA 6021
-            </a>
             <h1 className="hero-title">
               {i18n.language.startsWith('en') ? 'Counselling and Clinical Psychology WA' : 'Asesoramiento y Psicología Clínica WA'}
             </h1>
@@ -132,6 +132,9 @@ const MainSite = () => {
                 'We provide expert clinical psychology and counselling for individuals and couples, tailored to your unique needs.' : 
                 'Brindamos psicología clínica y asesoramiento experto para individuos y parejas, adaptado a tus necesidades únicas.'}
             </p>
+            <a href="https://maps.app.goo.gl/Ama3MT9mm8c3f3fT6" target="_blank" rel="noopener noreferrer" className="badge hero-location btn-secondary">
+              <MapPin className="mr-2 hero-location-icon" size={18} />49 Cedric Street, Stirling, WA 6021
+            </a>
         </div>
       </section>
 
@@ -194,7 +197,7 @@ const MainSite = () => {
       <section className="py-20">
         <div className="container">
           <h2 className="section-title">{t('ourProfessionals')}</h2>
-          <div className="grid md:grid-cols-2 gap-12 mt-12">
+          <div className={`grid md:grid-cols-2 gap-12 mt-12${profExpanded ? ' grid-align-start' : ''}`}>
             
             {/* Matias */}
             <div className="card">
@@ -207,6 +210,7 @@ const MainSite = () => {
               <Collapsible
                 moreText={t('seeMore')}
                 lessText={t('seeLess')}
+                onExpandChange={setProfExpanded}
                 extra={
                   <>
                     <div className="mb-4">
@@ -237,6 +241,7 @@ const MainSite = () => {
               <Collapsible
                 moreText={t('seeMore')}
                 lessText={t('seeLess')}
+                onExpandChange={setProfExpanded}
                 extra={
                   <>
                     <p className="mb-4 text-muted text-sm">{t('celesteBio2')}</p>
@@ -379,18 +384,25 @@ const Accordion = ({ items }) => {
   );
 };
 
-const Collapsible = ({ extra, moreText, lessText }) => {
+const Collapsible = ({ extra, moreText, lessText, onExpandChange }) => {
   const [expanded, setExpanded] = useState(false);
 
+  const toggle = () => {
+    setExpanded((prev) => {
+      if (onExpandChange) onExpandChange(!prev);
+      return !prev;
+    });
+  };
+
   return (
-    <div>
+    <div className="collapsible-wrapper">
       <div className={`collapsible ${expanded ? 'expanded' : ''}`}>
         {extra}
       </div>
       <button
         type="button"
         className="collapsible-toggle"
-        onClick={() => setExpanded(!expanded)}
+        onClick={toggle}
       >
         <span>{expanded ? lessText : moreText}</span>
         <ChevronDown size={16} className={expanded ? 'chevron-open' : ''} />
@@ -464,51 +476,60 @@ const IntakeForm = ({ onClose, initialTherapyType = 'individual' }) => {
 
   return (
     <Modal title={t('intakeFormTitle')} onClose={onClose}>
-      <form onSubmit={handleSubmit}>
+      <form className="intake-form" onSubmit={handleSubmit}>
         {error && <div style={{ color: 'red', marginBottom: '1rem', padding: '1rem', background: '#fee2e2', borderRadius: '8px' }}>{error}</div>}
 
-        <p className="form-label mb-2">{t('therapyType')}</p>
-        <div className="flex gap-4 mb-6">
-          <label className="form-check flex-1">
-            <input type="radio" name="therapyType" className="form-check-input" checked={form.therapyType === 'individual'} onChange={() => setForm({...form, therapyType: 'individual'})} />
-            <span className="form-check-label font-medium">{t('individualTherapyBtn')}</span>
-          </label>
-          <label className="form-check flex-1">
-            <input type="radio" name="therapyType" className="form-check-input" checked={form.therapyType === 'couples'} onChange={() => setForm({...form, therapyType: 'couples'})} />
-            <span className="form-check-label font-medium">{t('couplesTherapyBtn')}</span>
-          </label>
+        <div className="form-section">
+          <h4 className="form-section-title">{t('formSectionTherapyType')}</h4>
+          <div className="flex gap-3">
+            <label className="form-check flex-1">
+              <input type="radio" name="therapyType" className="form-check-input" checked={form.therapyType === 'individual'} onChange={() => setForm({...form, therapyType: 'individual'})} />
+              <span className="form-check-label font-medium">{t('individualTherapyBtn')}</span>
+            </label>
+            <label className="form-check flex-1">
+              <input type="radio" name="therapyType" className="form-check-input" checked={form.therapyType === 'couples'} onChange={() => setForm({...form, therapyType: 'couples'})} />
+              <span className="form-check-label font-medium">{t('couplesTherapyBtn')}</span>
+            </label>
+          </div>
         </div>
 
         {form.therapyType === 'individual' && (
-          <div className="flex flex-col gap-3 mb-6">
-            <label className="form-check">
-              <input type="checkbox" className="form-check-input" checked={form.medicare === 'yes'} onChange={() => toggleOption('medicare')} />
-              <span className="form-check-label font-medium">{t('hasMedicare')}</span>
-            </label>
-            <label className="form-check">
-              <input type="checkbox" className="form-check-input" checked={form.ndis === 'yes'} onChange={() => toggleOption('ndis')} />
-              <span className="form-check-label font-medium">{t('hasNDIS')}</span>
-            </label>
-            <label className="form-check">
-              <input type="checkbox" className="form-check-input" checked={form.certificates === 'yes'} onChange={() => toggleOption('certificates')} />
-              <span className="form-check-label font-medium">{t('needsReports')}</span>
-            </label>
-            <label className="form-check">
-              <input type="checkbox" className="form-check-input" checked={form.workCover === 'yes'} onChange={() => toggleOption('workCover')} />
-              <span className="form-check-label font-medium">{t('hasWorkCover')}</span>
-            </label>
-            <label className="form-check">
-              <input type="checkbox" className="form-check-input" checked={form.none === 'yes'} onChange={() => toggleOption('none')} />
-              <span className="form-check-label font-medium">{t('noneOfTheAbove')}</span>
-            </label>
+          <div className="form-section">
+            <h4 className="form-section-title">{t('formSectionReimbursements')}</h4>
+            <p className="form-comment mb-2">{t('therapyType')}</p>
+
+            <div className="flex flex-col gap-2">
+              <label className="form-check">
+                <input type="checkbox" className="form-check-input" checked={form.medicare === 'yes'} onChange={() => toggleOption('medicare')} />
+                <span className="form-check-label font-medium">{t('hasMedicare')}</span>
+              </label>
+              <label className="form-check">
+                <input type="checkbox" className="form-check-input" checked={form.ndis === 'yes'} onChange={() => toggleOption('ndis')} />
+                <span className="form-check-label font-medium">{t('hasNDIS')}</span>
+              </label>
+              <label className="form-check">
+                <input type="checkbox" className="form-check-input" checked={form.certificates === 'yes'} onChange={() => toggleOption('certificates')} />
+                <span className="form-check-label font-medium">{t('needsReports')}</span>
+              </label>
+              <label className="form-check">
+                <input type="checkbox" className="form-check-input" checked={form.workCover === 'yes'} onChange={() => toggleOption('workCover')} />
+                <span className="form-check-label font-medium">{t('hasWorkCover')}</span>
+              </label>
+              <label className="form-check">
+                <input type="checkbox" className="form-check-input" checked={form.none === 'yes'} onChange={() => toggleOption('none')} />
+                <span className="form-check-label font-medium">{t('noneOfTheAbove')}</span>
+              </label>
+            </div>
           </div>
         )}
 
-        <input className="form-control mb-4" type="text" placeholder={t('yourNamePlaceholder')} value={form.name} onChange={e => setForm({...form, name: e.target.value})} />
-        
-        <input className="form-control mb-8" type="email" placeholder={t('emailAddress')} required value={form.email} onChange={e => setForm({...form, email: e.target.value})} />
+        <div className="form-section">
+          <h4 className="form-section-title">{t('formSectionContact')}</h4>
+          <input className="form-control mb-3" type="text" placeholder={t('yourNamePlaceholder')} value={form.name} onChange={e => setForm({...form, name: e.target.value})} />
+          <input className="form-control mb-3" type="email" placeholder={t('emailAddress')} required value={form.email} onChange={e => setForm({...form, email: e.target.value})} />
+        </div>
 
-        <label className="form-check mb-4">
+        <label className="form-check mb-3">
           <input
             type="checkbox"
             className="form-check-input"
