@@ -98,6 +98,19 @@ const MainSite = () => {
     setActiveModal(null);
   };
 
+  useEffect(() => {
+    if (activeModal) {
+      const prevOverflow = document.body.style.overflow;
+      const prevHeight = document.body.style.height;
+      document.body.style.overflow = 'hidden';
+      document.body.style.height = '100dvh';
+      return () => {
+        document.body.style.overflow = prevOverflow;
+        document.body.style.height = prevHeight;
+      };
+    }
+  }, [activeModal]);
+
   return (
     <div className="app">
       {/* Header */}
