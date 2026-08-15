@@ -1,20 +1,33 @@
 import { BookHeart, BriefcaseBusiness, Check, ChevronDown, Heart, HeartHandshake, MapPin, Shield, User, X } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, Navigate, Route, Routes } from 'react-router-dom';
+import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import ComingSoon from './ComingSoon';
 import LegalPage from './LegalPage';
 import logo from './assets/logo.png';
 import { sendEmail } from './emailService';
 
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+};
+
 const App = () => (
-  <Routes>
-    <Route path="/" element={<ComingSoon />} />
-    <Route path="/soon" element={<MainSite />} />
-    <Route path="/privacy" element={<PrivacyPolicy />} />
-    <Route path="/terms" element={<TermsConditions />} />
-    <Route path="*" element={<Navigate to="/" replace />} />
-  </Routes>
+  <>
+    <ScrollToTop />
+    <Routes>
+      <Route path="/" element={<ComingSoon />} />
+      <Route path="/soon" element={<MainSite />} />
+      <Route path="/privacy" element={<PrivacyPolicy />} />
+      <Route path="/terms" element={<TermsConditions />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  </>
 );
 
 const PrivacyPolicy = () => {
