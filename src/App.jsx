@@ -117,7 +117,7 @@ const MainSite = () => {
               <MapPin className="mr-2 hero-location-icon" size={18} />49 Cedric Street, Stirling, WA 6021
             </a>
             <h1 className="hero-title">
-              {i18n.language.startsWith('en') ? 'Counselling and Clinical Psychology WA' : 'Counseloría y Psicología Clínica WA'}
+              {i18n.language.startsWith('en') ? 'Counselling and Clinical Psychology WA' : 'Asesoramiento y Psicología Clínica WA'}
             </h1>
             <p className="hero-subtitle">
               {i18n.language.startsWith('en') ? 
