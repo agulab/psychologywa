@@ -312,7 +312,7 @@ const MainSite = () => {
       {/* Footer */}
       <footer className="py-12 border-t" style={{ borderTop: '1px solid var(--border-color)' }}>
         <div className="container text-center text-muted">
-          <img src={logo} alt="Logo" style={{ height: 40, margin: '0 auto 1rem auto', filter: 'grayscale(1)', opacity: 0.5 }} />
+          <img src={logo} alt="Logo" style={{ height: 40, filter: 'grayscale(1)', opacity: 0.5 }} />
           <p>&copy; {new Date().getFullYear()} Counselling and Clinical Psychology WA. All rights reserved.</p>
           <div className="legal-links">
             <Link to="/privacy">{t('privacyPolicy')}</Link>
