@@ -182,57 +182,66 @@ const MainSite = () => {
       <section className="py-20 bg-light">
         <div className="container">
           <h2 className="section-title">{t('feesRebates')}</h2>
-          <div className="grid md:grid-cols-3 gap-8 mt-12">
-            <div className="card" style={{ padding: '2rem' }}>
-              <div className="card-header">
-                <div className="card-icon" style={{ width: 48, height: 48 }}><Shield size={24} /></div>
-                <h3 className="mb-0">{t('medicare')}</h3>
-              </div>
-              <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('medicareText1')}</p>
-              <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('medicareText2')}</p>
-            </div>
-            <div className="card" style={{ padding: '2rem' }}>
-              <div className="card-header">
-                <div className="card-icon" style={{ width: 48, height: 48 }}><Heart size={24} /></div>
-                <h3 className="mb-0">{t('couplesTherapyFees')}</h3>
-              </div>
-              <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('couplesTherapyFeesText')}</p>
-            </div>
-            <div className="card" style={{ padding: '2rem' }}>
-              <div className="card-header">
-                <div className="card-icon" style={{ width: 48, height: 48 }}><HeartHandshake size={24} /></div>
-                <h3 className="mb-0">{t('ndisFunding')}</h3>
-              </div>
-              <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('ndisFundingText1')}</p>
-              <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('ndisFundingText2')}</p>
-            </div>
-
-            <div className="card" style={{ padding: '2rem' }}>
-              <div className="card-header">
-                <div className="card-icon" style={{ width: 48, height: 48 }}><BriefcaseBusiness size={24} /></div>
-                <h3 className="mb-0">{t('workCover')}</h3>
-              </div>
-              <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('workCoverText1')}</p>
-              <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('workCoverText2')}</p>
-              <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('workCoverText3')}</p>
-            </div>
-            <div className="card" style={{ padding: '2rem' }}>
-              <div className="card-header">
-                <div className="card-icon" style={{ width: 48, height: 48 }}><BookHeart size={24} /></div>
-                <h3 className="mb-0">{t('privateHealth')}</h3>
-              </div>
-              <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('privateHealthText1')}</p>
-              <ul className="card-list">
-                <li>
-                  <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('privateHealthText2')}</p>
-                </li>
-                <li>
-                  <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('privateHealthText3')}</p>
-                </li>
-              </ul>
-              <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('privateHealthText4')}</p>
-            </div>
-          </div>
+          <Accordion
+            items={[
+              {
+                icon: <Shield size={24} />,
+                title: t('medicare'),
+                content: (
+                  <>
+                    <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('medicareText1')}</p>
+                    <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('medicareText2')}</p>
+                  </>
+                )
+              },
+              {
+                icon: <Heart size={24} />,
+                title: t('couplesTherapyFees'),
+                content: (
+                  <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('couplesTherapyFeesText')}</p>
+                )
+              },
+              {
+                icon: <HeartHandshake size={24} />,
+                title: t('ndisFunding'),
+                content: (
+                  <>
+                    <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('ndisFundingText1')}</p>
+                    <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('ndisFundingText2')}</p>
+                  </>
+                )
+              },
+              {
+                icon: <BriefcaseBusiness size={24} />,
+                title: t('workCover'),
+                content: (
+                  <>
+                    <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('workCoverText1')}</p>
+                    <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('workCoverText2')}</p>
+                    <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('workCoverText3')}</p>
+                  </>
+                )
+              },
+              {
+                icon: <BookHeart size={24} />,
+                title: t('privateHealth'),
+                content: (
+                  <>
+                    <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('privateHealthText1')}</p>
+                    <ul className="card-list">
+                      <li>
+                        <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('privateHealthText2')}</p>
+                      </li>
+                      <li>
+                        <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('privateHealthText3')}</p>
+                      </li>
+                    </ul>
+                    <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('privateHealthText4')}</p>
+                  </>
+                )
+              }
+            ]}
+          />
         </div>
       </section>
 
@@ -265,6 +274,32 @@ const Modal = ({ title, onClose, children }) => (
   </div>
 );
 
+
+const Accordion = ({ items }) => {
+  const [openIndex, setOpenIndex] = useState(null);
+
+  return (
+    <div className="accordion">
+      {items.map((item, index) => (
+        <div className={`accordion-item ${openIndex === index ? 'open' : ''}`} key={index}>
+          <button
+            type="button"
+            className="accordion-header"
+            aria-expanded={openIndex === index}
+            onClick={() => setOpenIndex(openIndex === index ? null : index)}
+          >
+            <div className="accordion-icon">{item.icon}</div>
+            <h3 className="accordion-title">{item.title}</h3>
+            <ChevronDown size={20} className="accordion-chevron" />
+          </button>
+          <div className="accordion-body">
+            <div className="accordion-content">{item.content}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
 
 const Collapsible = ({ extra, moreText, lessText }) => {
   const [expanded, setExpanded] = useState(false);
