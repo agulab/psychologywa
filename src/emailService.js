@@ -4,7 +4,7 @@ import emailjs from '@emailjs/browser';
  * Sends an email using EmailJS.
  *
  * @param {string} recipientEmail - The target email address (e.g. admin@).
- * @param {Object} formData - The data collected from the form (name, therapyType, medicare, ndis, certificates, email).
+ * @param {Object} formData - The data collected from the form (name, therapyType, medicare, ndis, certificates, workCover, none, email).
  * @returns {Promise} Resolves when the email is sent successfully.
  */
 export const sendEmail = async (recipientEmail, formData) => {

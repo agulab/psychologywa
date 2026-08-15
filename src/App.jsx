@@ -385,12 +385,29 @@ const IntakeForm = ({ onClose, initialTherapyType = 'individual' }) => {
     medicare: 'no',
     ndis: 'no',
     certificates: 'no',
+    workCover: 'no',
+    none: 'no',
     email: ''
   });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [agreed, setAgreed] = useState(false);
+
+  const toggleOption = (key) => {
+    if (key === 'none') {
+      setForm({
+        ...form,
+        none: form.none === 'yes' ? 'no' : 'yes',
+        medicare: 'no',
+        ndis: 'no',
+        certificates: 'no',
+        workCover: 'no'
+      });
+    } else {
+      setForm({ ...form, [key]: form[key] === 'yes' ? 'no' : 'yes', none: 'no' });
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -443,16 +460,24 @@ const IntakeForm = ({ onClose, initialTherapyType = 'individual' }) => {
         {form.therapyType === 'individual' && (
           <div className="flex flex-col gap-3 mb-6">
             <label className="form-check">
-              <input type="checkbox" className="form-check-input" checked={form.medicare === 'yes'} onChange={() => setForm({...form, medicare: form.medicare === 'yes' ? 'no' : 'yes'})} />
+              <input type="checkbox" className="form-check-input" checked={form.medicare === 'yes'} onChange={() => toggleOption('medicare')} />
               <span className="form-check-label font-medium">{t('hasMedicare')}</span>
             </label>
             <label className="form-check">
-              <input type="checkbox" className="form-check-input" checked={form.ndis === 'yes'} onChange={() => setForm({...form, ndis: form.ndis === 'yes' ? 'no' : 'yes'})} />
+              <input type="checkbox" className="form-check-input" checked={form.ndis === 'yes'} onChange={() => toggleOption('ndis')} />
               <span className="form-check-label font-medium">{t('hasNDIS')}</span>
             </label>
             <label className="form-check">
-              <input type="checkbox" className="form-check-input" checked={form.certificates === 'yes'} onChange={() => setForm({...form, certificates: form.certificates === 'yes' ? 'no' : 'yes'})} />
+              <input type="checkbox" className="form-check-input" checked={form.certificates === 'yes'} onChange={() => toggleOption('certificates')} />
               <span className="form-check-label font-medium">{t('needsReports')}</span>
+            </label>
+            <label className="form-check">
+              <input type="checkbox" className="form-check-input" checked={form.workCover === 'yes'} onChange={() => toggleOption('workCover')} />
+              <span className="form-check-label font-medium">{t('hasWorkCover')}</span>
+            </label>
+            <label className="form-check">
+              <input type="checkbox" className="form-check-input" checked={form.none === 'yes'} onChange={() => toggleOption('none')} />
+              <span className="form-check-label font-medium">{t('noneOfTheAbove')}</span>
             </label>
           </div>
         )}

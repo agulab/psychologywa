@@ -27,7 +27,7 @@ const LegalPage = ({ title, lastUpdated, intro, sections }) => {
       <main className="py-20">
         <div className="container legal-page">
           <Link to="/soon" className="legal-back">
-            <ArrowLeft size={16} /> {t('backToHome')}
+            <ArrowLeft size={16} /> {t('returnHome')}
           </Link>
           <h1 className="legal-title">{title}</h1>
           <p className="legal-updated">{lastUpdated}</p>
