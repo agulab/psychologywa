@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { MapPin, ArrowRight, User, Check, X, Heart, Shield, Sparkles, ChevronDown, BookHeart, BriefcaseBusiness, Accessibility } from 'lucide-react';
+import { MapPin, ArrowRight, User, Check, X, Heart, Shield, ChevronDown, BookHeart, BriefcaseBusiness, HeartHandshake } from 'lucide-react';
 import { sendEmail } from './emailService';
 import ComingSoon from './ComingSoon';
 import logo from './assets/logo.png';
@@ -49,8 +49,9 @@ const MainSite = () => {
       {/* Hero Section */}
       <section className="hero">
         <div className="container">
-          <div className="animate-slide-up">
-            <span className="badge">49 Cedric Street, Stirling, WA 6021</span>
+            <a href="https://maps.app.goo.gl/Ama3MT9mm8c3f3fT6" target="_blank" rel="noopener noreferrer" className="badge hero-location btn-secondary">
+              <MapPin className="mr-2 hero-location-icon" size={18} />49 Cedric Street, Stirling, WA 6021
+            </a>
             <h1 className="hero-title">
               {i18n.language.startsWith('en') ? 'Counselling & Clinical Psychology WA' : 'Counseloría y Psicología Clínica WA'}
             </h1>
@@ -59,15 +60,6 @@ const MainSite = () => {
                 'We provide expert clinical psychology and counselling for individuals and couples, tailored to your unique needs.' : 
                 'Brindamos psicología clínica y asesoramiento experto para individuos y parejas, adaptado a tus necesidades únicas.'}
             </p>
-            <div className="flex gap-4">
-              <a href="#services" className="btn btn-primary">
-                {t('exploreServices')} <ArrowRight className="ml-2" size={18} />
-              </a>
-              <a href="https://maps.app.goo.gl/Ama3MT9mm8c3f3fT6" target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
-                <MapPin className="mr-2" size={18} /> {t('location')}
-              </a>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -75,9 +67,6 @@ const MainSite = () => {
       <section id="services" className="py-20 bg-light">
         <div className="container">
           <h2 className="section-title">{t('servicesTitle')}</h2>
-          <p className="section-subtitle">
-            {t('generalInquiriesText2')}
-          </p>
           
           {/* Mobile Tabs */}
           <div className="md:hidden mobile-tabs-container">
@@ -169,7 +158,7 @@ const MainSite = () => {
             <div className="card">
               <div className="prof-header">
                 <img src="/Celeste2.jpeg" alt="Celeste Labaronnie" className="prof-image" />
-                <h3 className="card-title" style={{ color: 'var(--primary)' }}>Celeste Labaronnie</h3>
+                <h3 className="card-title" style={{ color: 'var(--primary)' }}>Dr. Celeste Labaronnie</h3>
                 <span className="badge mb-4">{t('celesteTitle')}</span>
               </div>
               <p className="mb-4">{t('celesteBio1')}</p>
@@ -211,7 +200,7 @@ const MainSite = () => {
             </div>
             <div className="card" style={{ padding: '2rem' }}>
               <div className="card-header">
-                <div className="card-icon" style={{ width: 48, height: 48 }}><Accessibility size={24} /></div>
+                <div className="card-icon" style={{ width: 48, height: 48 }}><HeartHandshake size={24} /></div>
                 <h3 className="mb-0">{t('ndisFunding')}</h3>
               </div>
               <p className="text-muted" style={{ fontSize: '0.9rem' }}>{t('ndisFundingText1')}</p>

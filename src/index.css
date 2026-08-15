@@ -132,6 +132,15 @@ a:hover {
   overflow: hidden;
 }
 
+.hero-location {
+  text-align: left;
+  margin: 0px;  
+}
+
+.hero-location-icon {
+  vertical-align: text-bottom;
+}
+
 .hero-title {
   font-size: clamp(2.5rem, 5vw, 4.5rem);
   font-weight: 700;
@@ -431,10 +440,6 @@ a:hover {
 
 .animate-fade-in {
   animation: fadeIn 0.6s ease-out forwards;
-}
-
-.animate-slide-up {
-  animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 /* Image overrides for professionals */
