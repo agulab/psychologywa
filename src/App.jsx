@@ -1,18 +1,69 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, Link } from 'react-router-dom';
 import { MapPin, ArrowRight, User, Check, X, Heart, Shield, ChevronDown, BookHeart, BriefcaseBusiness, HeartHandshake } from 'lucide-react';
 import { sendEmail } from './emailService';
 import ComingSoon from './ComingSoon';
+import LegalPage from './LegalPage';
 import logo from './assets/logo.png';
 
 const App = () => (
   <Routes>
     <Route path="/" element={<ComingSoon />} />
     <Route path="/soon" element={<MainSite />} />
+    <Route path="/privacy" element={<PrivacyPolicy />} />
+    <Route path="/terms" element={<TermsConditions />} />
     <Route path="*" element={<Navigate to="/" replace />} />
   </Routes>
 );
+
+const PrivacyPolicy = () => {
+  const { t } = useTranslation();
+  return (
+    <LegalPage
+      title={t('privacy.title')}
+      lastUpdated={t('privacy.lastUpdated')}
+      intro={t('privacy.intro')}
+      sections={[
+        { heading: t('privacy.s1Title'), paragraphs: [t('privacy.s1Text')] },
+        { heading: t('privacy.s2Title'), paragraphs: [t('privacy.s2Text')] },
+        { heading: t('privacy.s3Title'), paragraphs: [t('privacy.s3Text')] },
+        { heading: t('privacy.s4Title'), paragraphs: [t('privacy.s4Text')] },
+        { heading: t('privacy.s5Title'), paragraphs: [t('privacy.s5Text')] },
+        { heading: t('privacy.s6Title'), paragraphs: [t('privacy.s6Text')] },
+        { heading: t('privacy.s7Title'), paragraphs: [t('privacy.s7Text')] },
+        { heading: t('privacy.s8Title'), paragraphs: [t('privacy.s8Text')] },
+        { heading: t('privacy.s9Title'), paragraphs: [t('privacy.s9Text')] }
+      ]}
+    />
+  );
+};
+
+const TermsConditions = () => {
+  const { t } = useTranslation();
+  return (
+    <LegalPage
+      title={t('terms.title')}
+      lastUpdated={t('terms.lastUpdated')}
+      intro={t('terms.intro')}
+      sections={[
+        { heading: t('terms.s1Title'), paragraphs: [t('terms.s1Text')] },
+        { heading: t('terms.s2Title'), paragraphs: [t('terms.s2Text')] },
+        { heading: t('terms.s3Title'), paragraphs: [t('terms.s3Text')] },
+        { heading: t('terms.s4Title'), paragraphs: [t('terms.s4Text')] },
+        { heading: t('terms.s5Title'), paragraphs: [t('terms.s5Text')] },
+        { heading: t('terms.s6Title'), paragraphs: [t('terms.s6Text')] },
+        { heading: t('terms.s7Title'), paragraphs: [t('terms.s7Text')] },
+        { heading: t('terms.s8Title'), paragraphs: [t('terms.s8Text')] },
+        { heading: t('terms.s9Title'), paragraphs: [t('terms.s9Text')] },
+        { heading: t('terms.s10Title'), paragraphs: [t('terms.s10Text')] },
+        { heading: t('terms.s11Title'), paragraphs: [t('terms.s11Text')] },
+        { heading: t('terms.s12Title'), paragraphs: [t('terms.s12Text')] },
+        { heading: t('terms.s13Title'), paragraphs: [t('terms.s13Text')] }
+      ]}
+    />
+  );
+};
 
 const MainSite = () => {
   const { t, i18n } = useTranslation();
@@ -250,6 +301,11 @@ const MainSite = () => {
         <div className="container text-center text-muted">
           <img src={logo} alt="Logo" style={{ height: 40, margin: '0 auto 1rem auto', filter: 'grayscale(1)', opacity: 0.5 }} />
           <p>&copy; {new Date().getFullYear()} Counselling and Clinical Psychology WA. All rights reserved.</p>
+          <div className="legal-links">
+            <Link to="/privacy">{t('privacyPolicy')}</Link>
+            <span className="legal-separator">·</span>
+            <Link to="/terms">{t('termsConditions')}</Link>
+          </div>
         </div>
       </footer>
 
@@ -334,6 +390,7 @@ const IntakeForm = ({ onClose, initialTherapyType = 'individual' }) => {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [agreed, setAgreed] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -403,6 +460,22 @@ const IntakeForm = ({ onClose, initialTherapyType = 'individual' }) => {
         <input className="form-control mb-4" type="text" placeholder={t('yourNamePlaceholder')} value={form.name} onChange={e => setForm({...form, name: e.target.value})} />
         
         <input className="form-control mb-8" type="email" placeholder={t('emailAddress')} required value={form.email} onChange={e => setForm({...form, email: e.target.value})} />
+
+        <label className="form-check mb-4">
+          <input
+            type="checkbox"
+            className="form-check-input"
+            required
+            checked={agreed}
+            onChange={e => setAgreed(e.target.checked)}
+          />
+          <span className="form-check-label font-medium" style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
+            {t('consentText1')}{' '}
+            <a href="/terms" target="_blank" rel="noopener noreferrer" className="legal-link">{t('termsConditions')}</a>{' '}
+            {t('consentText2')}{' '}
+            <a href="/privacy" target="_blank" rel="noopener noreferrer" className="legal-link">{t('privacyPolicy')}</a>
+          </span>
+        </label>
 
         <button type="submit" className="btn btn-primary w-full" style={{ width: '100%' }} disabled={loading}>
           {loading ? 'Sending...' : t('submit')}
