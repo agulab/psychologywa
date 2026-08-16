@@ -138,7 +138,7 @@ const MainSite = () => {
       <section className="hero">
         <div className="container">
             <h1 className="hero-title">
-              {i18n.language.startsWith('en') ? 'Counselling and Clinical Psychology WA' : 'Asesoramiento y Psicología Clínica WA'}
+              {i18n.language.startsWith('en') ? 'Counselling and Clinical Psychology WA' : 'Terapia y Psicología Clínica WA'}
             </h1>
             <p className="hero-subtitle">
               {i18n.language.startsWith('en') ? 
