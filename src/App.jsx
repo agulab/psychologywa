@@ -175,8 +175,10 @@ const MainSite = () => {
           <div className="grid md:grid-cols-2 gap-8">
             {/* Individual Therapy Card */}
             <div className={`card mobile-connected-card ${activeServiceTab !== 'individual' ? 'hidden md:flex' : ''}`}>
-              <div className="card-icon"><User size={32} /></div>
-              <h3 className="card-title">{t('individualTherapyBtn')}</h3>
+              <div className="card-header">
+                <div className="card-icon"><User size={32} /></div>
+                <h3 className="card-title">{t('individualTherapyBtn')}</h3>
+              </div>
               <p className="mb-8 text-muted" style={{ flexGrow: 1 }}>
                 {t('indivTherapySubtitle')} {t('indivTherapyIntro')}
               </p>
@@ -187,13 +189,15 @@ const MainSite = () => {
 
             {/* Couples Therapy Card */}
             <div className={`card mobile-connected-card ${activeServiceTab !== 'couples' ? 'hidden md:flex' : ''}`}>
-              <div className="card-icon">
-                <div style={{ display: 'flex' }}>
-                  <User size={28} />
-                  <User size={28} style={{ marginLeft: '-8px' }} />
+              <div className="card-header">
+                <div className="card-icon">
+                  <div style={{ display: 'flex' }}>
+                    <User size={28} />
+                    <User size={28} style={{ marginLeft: '-8px' }} />
+                  </div>
                 </div>
+                <h3 className="card-title">{t('couplesTherapyTitle')}</h3>
               </div>
-              <h3 className="card-title">{t('couplesTherapyTitle')}</h3>
               <p className="mb-4" style={{ fontWeight: 600, color: 'var(--primary)' }}>{t('couplesTherapyCost')}</p>
               <p className="mb-8 text-muted" style={{ flexGrow: 1 }}>
                 {t('couplesTherapyIntro')}
@@ -216,7 +220,7 @@ const MainSite = () => {
             <div className="card">
               <div className="prof-header">
                 <img src="/Matias.png" alt="Matías de Ambrosio" className="prof-image" />
-                <h3 className="card-title" style={{ color: 'var(--primary)' }}>Matías de Ambrosio</h3>
+                <h3 className="professionals-card-title" style={{ color: 'var(--primary)' }}>Matías de Ambrosio</h3>
                 <span className="badge mb-4">{t('matiasTitle')}</span>
               </div>
               <p className="mb-4">{t('matiasBio1')}</p>
@@ -247,7 +251,7 @@ const MainSite = () => {
             <div className="card">
               <div className="prof-header">
                 <img src="/Celeste2.jpeg" alt="Celeste Labaronnie" className="prof-image" />
-                <h3 className="card-title" style={{ color: 'var(--primary)' }}>Dr. Celeste Labaronnie</h3>
+                <h3 className="professionals-card-title" style={{ color: 'var(--primary)' }}>Dr. Celeste Labaronnie</h3>
                 <span className="badge mb-4">{t('celesteTitle')}</span>
               </div>
               <p className="mb-4">{t('celesteBio1')}</p>
