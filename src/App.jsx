@@ -143,7 +143,7 @@ const MainSite = () => {
             <p className="hero-subtitle">
               {i18n.language.startsWith('en') ? 
                 'We provide expert clinical psychology and counselling for individuals and couples, tailored to your unique needs.' : 
-                'Brindamos psicología clínica y asesoramiento experto para individuos y parejas, adaptado a tus necesidades únicas.'}
+                'Brindamos psicología clínica y counselling experto para individuos y parejas, adaptado a tus necesidades únicas.'}
             </p>
             <a href="https://maps.app.goo.gl/Ama3MT9mm8c3f3fT6" target="_blank" rel="noopener noreferrer" className="badge hero-location btn-secondary">
               <MapPin className="mr-2 hero-location-icon" size={18} />49 Cedric Street, Stirling, WA 6021
