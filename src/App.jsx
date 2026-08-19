@@ -1,4 +1,4 @@
-import { BookHeart, BriefcaseBusiness, Check, ChevronDown, Heart, HeartHandshake, MapPin, Shield, User, X } from 'lucide-react';
+import { BookHeart, BriefcaseBusiness, Camera, Check, ChevronDown, Heart, HeartHandshake, MapPin, Shield, User, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom';
@@ -6,6 +6,43 @@ import ComingSoon from './ComingSoon';
 import LegalPage from './LegalPage';
 import logo from './assets/logo.png';
 import { sendEmail } from './emailService';
+
+const SEOConfig = {
+  '/': {
+    title: 'Counselling and Clinical Psychology WA — Celeste Labaronnie & Matias De Ambrosio | Psychologist Stirling WA',
+    description: 'Expert clinical psychology and counselling by Dr. Celeste Labaronnie and Matias De Ambrosio in Stirling, Western Australia. Individual therapy, couples counselling, NDIS, Medicare. English & Spanish.',
+  },
+  '/privacy': {
+    title: 'Privacy Policy — Counselling and Clinical Psychology WA',
+    description: 'Privacy Policy for Counselling and Clinical Psychology WA. Learn how we collect, use, and protect your personal information in accordance with the Privacy Act 1988.',
+  },
+  '/terms': {
+    title: 'Terms and Conditions — Counselling and Clinical Psychology WA',
+    description: 'Terms and Conditions for Counselling and Clinical Psychology WA. Read our service terms, fees, cancellation policy, and legal disclosures.',
+  },
+  '/soon': {
+    title: 'Coming Soon — Counselling and Clinical Psychology WA',
+    description: 'Counselling and Clinical Psychology WA — Coming Soon. Expert psychological services by Dr. Celeste Labaronnie and Matias De Ambrosio in Stirling, WA.',
+  },
+};
+
+const useSEO = () => {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    const config = SEOConfig[pathname] || SEOConfig['/'];
+    document.title = config.title;
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.setAttribute('content', config.description);
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) ogTitle.setAttribute('content', config.title);
+    const ogDesc = document.querySelector('meta[property="og:description"]');
+    if (ogDesc) ogDesc.setAttribute('content', config.description);
+    const twTitle = document.querySelector('meta[name="twitter:title"]');
+    if (twTitle) twTitle.setAttribute('content', config.title);
+    const twDesc = document.querySelector('meta[name="twitter:description"]');
+    if (twDesc) twDesc.setAttribute('content', config.description);
+  }, [pathname]);
+};
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -17,18 +54,21 @@ const ScrollToTop = () => {
   return null;
 };
 
-const App = () => (
-  <>
-    <ScrollToTop />
-    <Routes>
+const App = () => {
+  useSEO();
+  return (
+    <>
+      <ScrollToTop />
+      <Routes>
       <Route path="/" element={<MainSite />} />
       <Route path="/soon" element={<ComingSoon />} />
       <Route path="/privacy" element={<PrivacyPolicy />} />
       <Route path="/terms" element={<TermsConditions />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
-  </>
-);
+    </>
+  );
+};
 
 const PrivacyPolicy = () => {
   const { t } = useTranslation();
@@ -219,7 +259,7 @@ const MainSite = () => {
             {/* Matias */}
             <div className="card">
               <div className="prof-header">
-                <img src="/Matias.png" alt="Matías de Ambrosio" className="prof-image" />
+                <img src="/Matias.png" alt="Matias De Ambrosio - Senior Counsellor at Counselling and Clinical Psychology WA, Stirling" className="prof-image" />
                 <h3 className="professionals-card-title" style={{ color: 'var(--primary)' }}>Matías de Ambrosio</h3>
                 <span className="badge mb-4">{t('matiasTitle')}</span>
               </div>
@@ -250,7 +290,7 @@ const MainSite = () => {
             {/* Celeste */}
             <div className="card">
               <div className="prof-header">
-                <img src="/Celeste2.jpeg" alt="Celeste Labaronnie" className="prof-image" />
+                <img src="/Celeste2.jpeg" alt="Dr. Celeste Labaronnie - Clinical Psychologist at Counselling and Clinical Psychology WA, Stirling" className="prof-image" />
                 <h3 className="professionals-card-title" style={{ color: 'var(--primary)' }}>Dr. Celeste Labaronnie</h3>
                 <span className="badge mb-4">{t('celesteTitle')}</span>
               </div>
@@ -349,6 +389,7 @@ const MainSite = () => {
           <div className="legal-links">
             <Link to="/privacy">{t('privacyPolicy')}</Link>
             <Link to="/terms">{t('termsConditions')}</Link>
+            <a href="https://www.instagram.com/counsandclinpsychwa" target="_blank" rel="noopener noreferrer"><Camera size={16} style={{ verticalAlign: 'middle', marginRight: '4px' }} />Instagram</a>
           </div>
         </div>
       </footer>
