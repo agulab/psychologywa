@@ -1,4 +1,4 @@
-import { BookHeart, BriefcaseBusiness, Camera, Check, ChevronDown, Heart, HeartHandshake, MapPin, Shield, User, X } from 'lucide-react';
+import { BookHeart, BriefcaseBusiness, Camera, Check, ChevronDown, Heart, HeartHandshake, Mail, MapPin, Phone, Shield, User, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom';
@@ -261,6 +261,10 @@ const MainSite = () => {
               <div className="prof-header">
                 <img src="/Matias.png" alt="Matias De Ambrosio - Senior Counsellor at Counselling and Clinical Psychology WA, Stirling" className="prof-image" />
                 <h3 className="professionals-card-title" style={{ color: 'var(--primary)' }}>Matías de Ambrosio</h3>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                  <a href="tel:+61499341962" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}><Phone size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />0499 341 962</a>
+                  <a href="mailto:matias@counsellingandclinicalpsychologywa.com.au" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}><Mail size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />Email</a>
+                </div>
                 <span className="badge mb-4">{t('matiasTitle')}</span>
               </div>
               <p className="mb-4">{t('matiasBio1')}</p>
@@ -292,6 +296,10 @@ const MainSite = () => {
               <div className="prof-header">
                 <img src="/Celeste2.jpeg" alt="Dr. Celeste Labaronnie - Clinical Psychologist at Counselling and Clinical Psychology WA, Stirling" className="prof-image" />
                 <h3 className="professionals-card-title" style={{ color: 'var(--primary)' }}>Dr. Celeste Labaronnie</h3>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                  <a href="tel:+61499614613" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}><Phone size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />0499 614 613</a>
+                  <a href="mailto:celeste@counsellingandclinicalpsychologywa.com.au" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}><Mail size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />Email</a>
+                </div>
                 <span className="badge mb-4">{t('celesteTitle')}</span>
               </div>
               <p className="mb-4">{t('celesteBio1')}</p>
