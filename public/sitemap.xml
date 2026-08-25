@@ -1,21 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://counsellingandclinicalpsychologywa.com.au/</loc>
-    <lastmod>2026-08-19</lastmod>
+    <lastmod>2026-08-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://counsellingandclinicalpsychologywa.com.au/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://counsellingandclinicalpsychologywa.com.au/" />
   </url>
   <url>
     <loc>https://counsellingandclinicalpsychologywa.com.au/privacy</loc>
-    <lastmod>2026-08-19</lastmod>
+    <lastmod>2026-08-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://counsellingandclinicalpsychologywa.com.au/privacy" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://counsellingandclinicalpsychologywa.com.au/privacy" />
   </url>
   <url>
     <loc>https://counsellingandclinicalpsychologywa.com.au/terms</loc>
-    <lastmod>2026-08-19</lastmod>
+    <lastmod>2026-08-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://counsellingandclinicalpsychologywa.com.au/terms" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://counsellingandclinicalpsychologywa.com.au/terms" />
   </url>
 </urlset>
