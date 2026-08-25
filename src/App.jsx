@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import ComingSoon from './ComingSoon';
 import LegalPage from './LegalPage';
-import logo from './assets/logo.png';
+import logo from './assets/logo.webp';
 import { sendEmail } from './emailService';
 
 const SEOConfig = {
@@ -259,7 +259,7 @@ const MainSite = () => {
             {/* Matias */}
             <div className="card">
               <div className="prof-header">
-                <img src="/Matias.png" alt="Matias De Ambrosio - Senior Counsellor at Counselling and Clinical Psychology WA, Stirling" className="prof-image" />
+                <img src="/Matias.jpg" alt="Matias De Ambrosio - Senior Counsellor at Counselling and Clinical Psychology WA, Stirling" className="prof-image" />
                 <h3 className="professionals-card-title" style={{ color: 'var(--primary)' }}>Matías de Ambrosio</h3>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
                   <a href="tel:+61499341962" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}><Phone size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />0499 341 962</a>

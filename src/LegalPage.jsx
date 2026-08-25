@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
-import logo from './assets/logo.png';
+import logo from './assets/logo.webp';
 
 const LegalPage = ({ title, lastUpdated, intro, sections }) => {
   const { t, i18n } = useTranslation();
