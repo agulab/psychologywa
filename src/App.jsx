@@ -549,7 +549,8 @@ const IntakeForm = ({ onClose, initialTherapyType = 'individual' }) => {
     certificates: 'no',
     workCover: 'no',
     none: 'no',
-    email: ''
+    email: '',
+    phone: ''
   });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -596,6 +597,7 @@ const IntakeForm = ({ onClose, initialTherapyType = 'individual' }) => {
           </div>
           <h3 className="mb-4">{t('requestSent')}</h3>
           <p className="text-muted">{t('successMessage')}</p>
+          <p className="text-muted">{t('successSecondMessage')}</p>
           <button className="btn btn-primary mt-8" onClick={onClose}>{t('returnHome')}</button>
         </div>
       </Modal>
@@ -655,6 +657,7 @@ const IntakeForm = ({ onClose, initialTherapyType = 'individual' }) => {
           <h4 className="form-section-title">{t('formSectionContact')}</h4>
           <input className="form-control mb-3" type="text" placeholder={t('yourNamePlaceholder')} value={form.name} onChange={e => setForm({...form, name: e.target.value})} />
           <input className="form-control mb-3" type="email" placeholder={t('emailAddress')} required value={form.email} onChange={e => setForm({...form, email: e.target.value})} />
+          <input className="form-control mb-3" type="tel" placeholder={t('phoneNumber')} value={form.phone} onChange={e => setForm({...form, phone: e.target.value})} />
         </div>
 
         <label className="form-check mb-3">
