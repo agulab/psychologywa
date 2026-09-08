@@ -109,6 +109,7 @@ a:hover {
   .md\:flex-row { flex-direction: row; }
   .md\:hidden { display: none !important; }
   .md\:flex { display: flex !important; }
+  .md\:inline-flex { display: inline-flex !important; }
   .md\:block { display: block !important; }
 }
 

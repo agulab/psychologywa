@@ -1,4 +1,4 @@
-import { BookHeart, BriefcaseBusiness, Camera, Check, ChevronDown, Heart, HeartHandshake, Mail, MapPin, Phone, Shield, User, X } from 'lucide-react';
+import { BookHeart, BriefcaseBusiness, Camera, Check, ChevronDown, Copy, Heart, HeartHandshake, Mail, MapPin, Phone, Shield, User, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom';
@@ -130,8 +130,30 @@ const MainSite = () => {
   // Any professional card expanded
   const [profExpanded, setProfExpanded] = useState(false);
 
+  // Copied email feedback
+  const [copiedEmail, setCopiedEmail] = useState(null);
+
   const toggleLanguage = () => {
     i18n.changeLanguage(i18n.language.startsWith('en') ? 'es' : 'en');
+  };
+
+  const copyEmail = async (email) => {
+    try {
+      await navigator.clipboard.writeText(email);
+      setCopiedEmail(email);
+      setTimeout(() => setCopiedEmail(null), 2000);
+    } catch {
+      const textArea = document.createElement('textarea');
+      textArea.value = email;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-999999px';
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      setCopiedEmail(email);
+      setTimeout(() => setCopiedEmail(null), 2000);
+    }
   };
 
   const closeModal = () => {
@@ -263,7 +285,27 @@ const MainSite = () => {
                 <h3 className="professionals-card-title" style={{ color: 'var(--primary)' }}>Matías de Ambrosio</h3>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
                   <a href="tel:+61499341962" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}><Phone size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />0499 341 962</a>
-                  <a href="mailto:matias@counsellingandclinicalpsychologywa.com.au" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}><Mail size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />Email</a>
+                  <span className="hidden md:inline-flex" style={{ alignItems: 'center', gap: '4px', color: 'var(--text-muted)' }}>
+                    <Mail size={14} style={{ verticalAlign: 'middle' }} />
+                    <span style={{ fontSize: '0.85rem' }}>matias@counsellingandclinicalpsychologywa.com.au</span>
+                    <button
+                      onClick={() => copyEmail('matias@counsellingandclinicalpsychologywa.com.au')}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        padding: '2px',
+                        cursor: 'pointer',
+                        color: copiedEmail === 'matias@counsellingandclinicalpsychologywa.com.au' ? '#16a34a' : 'var(--text-muted)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        transition: 'color 0.2s'
+                      }}
+                      title={copiedEmail === 'matias@counsellingandclinicalpsychologywa.com.au' ? 'Copiado' : 'Copiar email'}
+                    >
+                      {copiedEmail === 'matias@counsellingandclinicalpsychologywa.com.au' ? <Check size={14} /> : <Copy size={14} />}
+                    </button>
+                  </span>
+                  <a href="mailto:matias@counsellingandclinicalpsychologywa.com.au" className="md:hidden" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}><Mail size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />Email</a>
                 </div>
                 <span className="badge mb-4">{t('matiasTitle')}</span>
               </div>
@@ -298,7 +340,27 @@ const MainSite = () => {
                 <h3 className="professionals-card-title" style={{ color: 'var(--primary)' }}>Dr. Celeste Labaronnie</h3>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
                   <a href="tel:+61499614613" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}><Phone size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />0499 614 613</a>
-                  <a href="mailto:celeste@counsellingandclinicalpsychologywa.com.au" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}><Mail size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />Email</a>
+                  <span className="hidden md:inline-flex" style={{ alignItems: 'center', gap: '4px', color: 'var(--text-muted)' }}>
+                    <Mail size={14} style={{ verticalAlign: 'middle' }} />
+                    <span style={{ fontSize: '0.85rem' }}>celeste@counsellingandclinicalpsychologywa.com.au</span>
+                    <button
+                      onClick={() => copyEmail('celeste@counsellingandclinicalpsychologywa.com.au')}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        padding: '2px',
+                        cursor: 'pointer',
+                        color: copiedEmail === 'celeste@counsellingandclinicalpsychologywa.com.au' ? '#16a34a' : 'var(--text-muted)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        transition: 'color 0.2s'
+                      }}
+                      title={copiedEmail === 'celeste@counsellingandclinicalpsychologywa.com.au' ? 'Copiado' : 'Copiar email'}
+                    >
+                      {copiedEmail === 'celeste@counsellingandclinicalpsychologywa.com.au' ? <Check size={14} /> : <Copy size={14} />}
+                    </button>
+                  </span>
+                  <a href="mailto:celeste@counsellingandclinicalpsychologywa.com.au" className="md:hidden" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}><Mail size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />Email</a>
                 </div>
                 <span className="badge mb-4">{t('celesteTitle')}</span>
               </div>
