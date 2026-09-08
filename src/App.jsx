@@ -655,6 +655,12 @@ const IntakeForm = ({ onClose, initialTherapyType = 'individual' }) => {
 
         <div className="form-section">
           <h4 className="form-section-title">{t('formSectionContact')}</h4>
+          {form.therapyType === 'couples' && (
+            <p className="form-comment mb-2">{t('couplesInfoText')}</p>
+          )}
+          {form.therapyType === 'individual' && (form.medicare === 'yes' || form.ndis === 'yes' || form.certificates === 'yes' || form.workCover === 'yes') && (
+            <p className="form-comment mb-2">{t('individualInfoText')}</p>
+          )}
           <input className="form-control mb-3" type="text" placeholder={t('yourNamePlaceholder')} value={form.name} onChange={e => setForm({...form, name: e.target.value})} />
           <input className="form-control mb-3" type="email" placeholder={t('emailAddress')} required value={form.email} onChange={e => setForm({...form, email: e.target.value})} />
           <input className="form-control mb-3" type="tel" placeholder={t('phoneNumber')} value={form.phone} onChange={e => setForm({...form, phone: e.target.value})} />

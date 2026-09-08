@@ -118,6 +118,8 @@
   "needsReports": "I will require forms or certificates",
   "hasWorkCover": "I'm here regarding a WorkCover claim",
   "noneOfTheAbove": "None of the above",
+  "couplesInfoText": "Couples counselling is provided by Matias De Ambrosio. The fee is $140 AUD per session.",
+  "individualInfoText": "Based on your selected options, Celeste Labaronnie will reach out to you.",
   "privacyPolicy": "Privacy Policy",
   "termsConditions": "Terms and Conditions",
   "consentText1": "I have read and agree to the",
