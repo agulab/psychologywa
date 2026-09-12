@@ -574,8 +574,21 @@ const IntakeForm = ({ onClose, initialTherapyType = 'individual' }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setError(null);
+
+    if (
+      form.therapyType === 'individual' &&
+      form.medicare === 'no' &&
+      form.ndis === 'no' &&
+      form.certificates === 'no' &&
+      form.workCover === 'no' &&
+      form.none === 'no'
+    ) {
+      setError(t('reimbursementSelectionRequired'));
+      return;
+    }
+
+    setLoading(true);
 
     try {
       await sendEmail('admin@counsellingandclinicalpsychologywa.com.au', form);
@@ -663,7 +676,7 @@ const IntakeForm = ({ onClose, initialTherapyType = 'individual' }) => {
           )}
           <input className="form-control mb-3" type="text" placeholder={t('yourNamePlaceholder')} value={form.name} onChange={e => setForm({...form, name: e.target.value})} />
           <input className="form-control mb-3" type="email" placeholder={t('emailAddress')} required value={form.email} onChange={e => setForm({...form, email: e.target.value})} />
-          <input className="form-control mb-3" type="tel" placeholder={t('phoneNumber')} value={form.phone} onChange={e => setForm({...form, phone: e.target.value})} />
+          <input className="form-control mb-3" type="tel" placeholder={t('phoneNumber')} required value={form.phone} onChange={e => setForm({...form, phone: e.target.value})} />
         </div>
 
         <label className="form-check mb-3">
