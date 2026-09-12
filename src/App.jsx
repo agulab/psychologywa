@@ -1,4 +1,4 @@
-import { BookHeart, BriefcaseBusiness, Camera, Check, ChevronDown, Copy, Heart, HeartHandshake, Mail, MapPin, Phone, Shield, User, X } from 'lucide-react';
+import { BookHeart, BriefcaseBusiness, Camera, Check, ChevronDown, Copy, Heart, HeartHandshake, HelpCircle, Mail, MapPin, Phone, Shield, User, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom';
@@ -549,6 +549,7 @@ const IntakeForm = ({ onClose, initialTherapyType = 'individual' }) => {
     certificates: 'no',
     workCover: 'no',
     none: 'no',
+    practitioner: '',
     email: '',
     phone: ''
   });
@@ -556,6 +557,7 @@ const IntakeForm = ({ onClose, initialTherapyType = 'individual' }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [agreed, setAgreed] = useState(false);
+  const [practitionerTipOpen, setPractitionerTipOpen] = useState(false);
 
   const toggleOption = (key) => {
     if (key === 'none') {
@@ -585,6 +587,11 @@ const IntakeForm = ({ onClose, initialTherapyType = 'individual' }) => {
       form.none === 'no'
     ) {
       setError(t('reimbursementSelectionRequired'));
+      return;
+    }
+
+    if (form.none === 'yes' && !form.practitioner) {
+      setError(t('practitionerRequired'));
       return;
     }
 
@@ -673,6 +680,38 @@ const IntakeForm = ({ onClose, initialTherapyType = 'individual' }) => {
           )}
           {form.therapyType === 'individual' && (form.medicare === 'yes' || form.ndis === 'yes' || form.certificates === 'yes' || form.workCover === 'yes') && (
             <p className="form-comment mb-2">{t('individualInfoText')}</p>
+          )}
+          {form.therapyType === 'individual' && form.none === 'yes' && (
+            <div className="practitioner-select">
+              <p className="form-comment mb-2">
+                {t('choosePractitioner')}{' '}
+                <span className="tooltip-wrapper">
+                  <button
+                    type="button"
+                    className="tooltip-trigger"
+                    aria-label={t('practitionerTooltip')}
+                    onClick={() => setPractitionerTipOpen(prev => !prev)}
+                    onMouseEnter={() => setPractitionerTipOpen(true)}
+                    onMouseLeave={() => setPractitionerTipOpen(false)}
+                  >
+                    <HelpCircle size={16} />
+                  </button>
+                  <span className={`tooltip ${practitionerTipOpen ? 'open' : ''}`} role="tooltip">
+                    {t('practitionerTooltip')}
+                  </span>
+                </span>
+              </p>
+              <div className="flex gap-12">
+                <label className="form-check">
+                  <input type="radio" name="practitioner" className="form-check-input" checked={form.practitioner === 'matias'} onChange={() => setForm({...form, practitioner: 'matias'})} />
+                  <span className="form-check-label font-medium">{t('practitionerMatias')}</span>
+                </label>
+                <label className="form-check">
+                  <input type="radio" name="practitioner" className="form-check-input" checked={form.practitioner === 'celeste'} onChange={() => setForm({...form, practitioner: 'celeste'})} />
+                  <span className="form-check-label font-medium">{t('practitionerCeleste')}</span>
+                </label>
+              </div>
+            </div>
           )}
           <input className="form-control mb-3" type="text" placeholder={t('yourNamePlaceholder')} value={form.name} onChange={e => setForm({...form, name: e.target.value})} />
           <input className="form-control mb-3" type="email" placeholder={t('emailAddress')} required value={form.email} onChange={e => setForm({...form, email: e.target.value})} />
