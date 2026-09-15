@@ -173,6 +173,17 @@ const MainSite = () => {
     }
   }, [activeModal]);
 
+  useEffect(() => {
+    const handlePointerDown = (e) => {
+      setPractitionerTipOpen(prev => {
+        if (prev && !e.target.closest('.tooltip-wrapper')) return false;
+        return prev;
+      });
+    };
+    document.addEventListener('pointerdown', handlePointerDown);
+    return () => document.removeEventListener('pointerdown', handlePointerDown);
+  }, []);
+
   return (
     <div className="app">
       {/* Header */}
@@ -691,8 +702,6 @@ const IntakeForm = ({ onClose, initialTherapyType = 'individual' }) => {
                     className="tooltip-trigger"
                     aria-label={t('practitionerTooltip')}
                     onClick={() => setPractitionerTipOpen(prev => !prev)}
-                    onMouseEnter={() => setPractitionerTipOpen(true)}
-                    onMouseLeave={() => setPractitionerTipOpen(false)}
                   >
                     <HelpCircle size={16} />
                   </button>

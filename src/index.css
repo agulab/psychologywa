@@ -747,6 +747,12 @@ a:hover {
   color: #fff;
 }
 
+.tooltip-wrapper:hover .tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
 .tooltip {
   position: absolute;
   bottom: calc(100% + 8px);
@@ -786,6 +792,28 @@ a:hover {
   opacity: 1;
   visibility: visible;
   transform: translateX(-50%) translateY(0);
+}
+
+@media (max-width: 767px) {
+  .tooltip {
+    top: calc(100% + 8px);
+    bottom: auto;
+    left: 0;
+    width: 260px;
+    max-width: calc(100vw - 2rem);
+    transform: translateY(4px);
+  }
+  .tooltip-wrapper:hover .tooltip,
+  .tooltip.open {
+    transform: translateY(0);
+  }
+  .tooltip::after {
+    top: auto;
+    bottom: 100%;
+    left: 11px;
+    border-top-color: transparent;
+    border-bottom-color: var(--surface);
+  }
 }
 
 /* Badges */
