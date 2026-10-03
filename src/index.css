@@ -262,10 +262,24 @@ a:hover {
 .btn-ghost {
   background: transparent;
   color: var(--text-main);
+  border: 1px solid var(--border-color);
+  -webkit-tap-highlight-color: transparent;
 }
 .btn-ghost:hover {
   background: var(--primary-bg);
   color: var(--primary);
+  border-color: var(--primary-light);
+}
+
+.btn:focus-visible,
+.btn-ghost:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.btn:focus:not(:focus-visible),
+.btn-ghost:focus:not(:focus-visible) {
+  outline: none;
 }
 
 /* Cards */

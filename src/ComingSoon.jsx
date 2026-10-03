@@ -18,19 +18,13 @@ const ComingSoon = () => {
     }}>
       <button
         onClick={() => i18n.changeLanguage(i18n.language.startsWith('en') ? 'es' : 'en')}
+        className="btn btn-ghost"
         style={{
           position: 'absolute',
           top: '1.5rem',
           right: '1.5rem',
-          background: 'none',
-          border: '1px solid var(--border-color, rgba(81,54,137,0.2))',
-          borderRadius: '9999px',
           padding: '0.4rem 1rem',
-          fontFamily: "'Outfit', sans-serif",
-          fontSize: '0.85rem',
-          color: 'var(--text-muted, #6B7280)',
-          cursor: 'pointer',
-          transition: 'all 0.3s'
+          fontSize: '0.85rem'
         }}
       >
         {i18n.language.startsWith('en') ? 'Español' : 'English'}
