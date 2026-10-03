@@ -113,6 +113,9 @@ a:hover {
   .md\:block { display: block !important; }
 }
 
+@media (min-width: 1200px) {
+  .lg\:grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+}
 /* Header Glassmorphism */
 .header {
   position: sticky;
@@ -200,6 +203,21 @@ a:hover {
   color: var(--text-muted);
   margin-bottom: 1rem;
 }
+
+.hero-contact {
+  display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    a {
+      margin: 0;
+      @media (max-width: 768px) {
+        font-size: 12px;
+      }
+    }
+    
+
+}   
 
 /* Buttons */
 .btn {

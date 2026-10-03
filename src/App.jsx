@@ -217,10 +217,17 @@ const MainSite = () => {
               {i18n.language.startsWith('en') ? 
                 'We provide expert clinical psychology and counselling for individuals and couples, tailored to your unique needs.' : 
                 'Brindamos psicología clínica y counselling experto para individuos y parejas, adaptado a tus necesidades únicas.'}
-            </p>
-            <a href="https://maps.app.goo.gl/DVjm97YrNkYzbk2M6" target="_blank" rel="noopener noreferrer" className="badge hero-location btn-secondary">
-              <MapPin className="mr-2 hero-location-icon" size={18} />49 Cedric Street, Stirling, WA 6021
-            </a>
+            </p>    
+            <div className="hero-contact">
+              <a href="https://maps.app.goo.gl/DVjm97YrNkYzbk2M6" target="_blank" rel="noopener noreferrer" className="badge hero-location btn-secondary">
+                <MapPin className="mr-2 hero-location-icon" size={18} />49 Cedric Street, Stirling, WA 6021
+              </a>
+              <a href="mailto:admin@counsellingandclinicalpsychologywa.com.au" target="_blank" rel="noopener noreferrer" className="badge hero-location btn-secondary" >
+                <Mail size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />admin@counsellingandclinicalpsychologywa.com.au
+              </a>
+            </div>
+            
+            
         </div>
       </section>
 
@@ -287,8 +294,53 @@ const MainSite = () => {
       <section className="py-20">
         <div className="container">
           <h2 className="section-title">{t('ourProfessionals')}</h2>
-          <div className={`grid md:grid-cols-2 gap-12 mt-12${profExpanded ? ' grid-align-start' : ''}`}>
+          <div className={`grid lg:grid-cols-2 gap-12 mt-12${profExpanded ? ' grid-align-start' : ''}`}>
             
+            {/* Celeste */}
+            <div className="card">
+              <div className="prof-header">
+                <img src="/Celeste2.jpeg" alt="Dr. Celeste Labaronnie - Clinical Psychologist at Counselling and Clinical Psychology WA, Stirling" className="prof-image" />
+                <h3 className="professionals-card-title" style={{ color: 'var(--primary)' }}>Dr. Celeste Labaronnie</h3>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                  <a href="tel:+61499614613" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}><Phone size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />0499 614 613</a>
+                  <span className="hidden md:inline-flex" style={{ alignItems: 'center', gap: '4px', color: 'var(--text-muted)' }}>
+                    <Mail size={14} style={{ verticalAlign: 'middle' }} />
+                    <span style={{ fontSize: '0.85rem' }}>celeste@counsellingandclinicalpsychologywa.com.au</span>
+                    <button
+                      onClick={() => copyEmail('celeste@counsellingandclinicalpsychologywa.com.au')}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        padding: '2px',
+                        cursor: 'pointer',
+                        color: copiedEmail === 'celeste@counsellingandclinicalpsychologywa.com.au' ? '#16a34a' : 'var(--text-muted)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        transition: 'color 0.2s'
+                      }}
+                      title={copiedEmail === 'celeste@counsellingandclinicalpsychologywa.com.au' ? 'Copiado' : 'Copiar email'}
+                    >
+                      {copiedEmail === 'celeste@counsellingandclinicalpsychologywa.com.au' ? <Check size={14} /> : <Copy size={14} />}
+                    </button>
+                  </span>
+                  <a href="mailto:celeste@counsellingandclinicalpsychologywa.com.au" className="md:hidden" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}><Mail size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />Email</a>
+                </div>
+                <span className="badge mb-4">{t('celesteTitle')}</span>
+              </div>
+              <p className="mb-4">{t('celesteBio1')}</p>
+              <Collapsible
+                moreText={t('seeMore')}
+                lessText={t('seeLess')}
+                onExpandChange={setProfExpanded}
+                extra={
+                  <>
+                    <p className="mb-4 text-muted text-sm">{t('celesteBio2')}</p>
+                    <p className="mb-4 text-muted text-sm">{t('celesteBio3')}</p>
+                  </>
+                }
+              />
+            </div>
+
             {/* Matias */}
             <div className="card">
               <div className="prof-header">
@@ -339,51 +391,6 @@ const MainSite = () => {
                       <strong className="block mb-2">{t('matiasCulturalTitle')}</strong>
                       <p className="text-muted text-sm">{t('matiasCulturalBio')}</p>
                     </div>
-                  </>
-                }
-              />
-            </div>
-
-            {/* Celeste */}
-            <div className="card">
-              <div className="prof-header">
-                <img src="/Celeste2.jpeg" alt="Dr. Celeste Labaronnie - Clinical Psychologist at Counselling and Clinical Psychology WA, Stirling" className="prof-image" />
-                <h3 className="professionals-card-title" style={{ color: 'var(--primary)' }}>Dr. Celeste Labaronnie</h3>
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                  <a href="tel:+61499614613" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}><Phone size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />0499 614 613</a>
-                  <span className="hidden md:inline-flex" style={{ alignItems: 'center', gap: '4px', color: 'var(--text-muted)' }}>
-                    <Mail size={14} style={{ verticalAlign: 'middle' }} />
-                    <span style={{ fontSize: '0.85rem' }}>celeste@counsellingandclinicalpsychologywa.com.au</span>
-                    <button
-                      onClick={() => copyEmail('celeste@counsellingandclinicalpsychologywa.com.au')}
-                      style={{
-                        background: 'none',
-                        border: 'none',
-                        padding: '2px',
-                        cursor: 'pointer',
-                        color: copiedEmail === 'celeste@counsellingandclinicalpsychologywa.com.au' ? '#16a34a' : 'var(--text-muted)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        transition: 'color 0.2s'
-                      }}
-                      title={copiedEmail === 'celeste@counsellingandclinicalpsychologywa.com.au' ? 'Copiado' : 'Copiar email'}
-                    >
-                      {copiedEmail === 'celeste@counsellingandclinicalpsychologywa.com.au' ? <Check size={14} /> : <Copy size={14} />}
-                    </button>
-                  </span>
-                  <a href="mailto:celeste@counsellingandclinicalpsychologywa.com.au" className="md:hidden" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}><Mail size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />Email</a>
-                </div>
-                <span className="badge mb-4">{t('celesteTitle')}</span>
-              </div>
-              <p className="mb-4">{t('celesteBio1')}</p>
-              <Collapsible
-                moreText={t('seeMore')}
-                lessText={t('seeLess')}
-                onExpandChange={setProfExpanded}
-                extra={
-                  <>
-                    <p className="mb-4 text-muted text-sm">{t('celesteBio2')}</p>
-                    <p className="mb-4 text-muted text-sm">{t('celesteBio3')}</p>
                   </>
                 }
               />
