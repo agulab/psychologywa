@@ -300,7 +300,10 @@ const MainSite = () => {
             <div className="card">
               <div className="prof-header">
                 <img src="/Celeste2.jpeg" alt="Dr. Celeste Labaronnie - Clinical Psychologist at Counselling and Clinical Psychology WA, Stirling" className="prof-image" />
-                <h3 className="professionals-card-title" style={{ color: 'var(--primary)' }}>Dr. Celeste Labaronnie</h3>
+                <div style={{marginBottom: '1rem' }}>
+                  <h3 className="professionals-card-title" style={{ color: 'var(--primary)', marginBottom: '0' }}>Dr. Celeste Labaronnie</h3>
+                  <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', color: 'var(--primary-light)' }}>Provider number 3152333X</span>
+                </div>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
                   <a href="tel:+61499614613" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}><Phone size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />0499 614 613</a>
                   <span className="hidden md:inline-flex" style={{ alignItems: 'center', gap: '4px', color: 'var(--text-muted)' }}>
